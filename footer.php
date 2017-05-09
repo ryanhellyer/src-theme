@@ -12,9 +12,6 @@
 </main><!-- #main -->
 
 
-<?php get_template_part( 'templates/content-home-footer' ); ?>
-
-
 <footer id="site-footer" role="contentinfo">
 
 	<p>

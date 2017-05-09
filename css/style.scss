@@ -4,6 +4,7 @@ $paragraph_font: 'Open Sans', sans-serif;
 $red: #cd0203;
 $dark_background_colour: #202020;
 $light_background_colour: #ebebeb;
+$forum_odd_background: #f9f9f9;
 $hover_red: #de1314;
 $header_height: 100px;
 $wrap_width: 92%;
@@ -20,8 +21,12 @@ body,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,a,img,dl,dt,dd,ol,ul,li,fieldset,form
 	list-style: none;
 }
 
-body {
+body.home {
 	background: $light_background_colour;
+}
+
+body {
+	background: #fff;
 }
 
 b,
@@ -77,6 +82,10 @@ address {
 		height: 64px;
 		background: url(../images/logo.png);
 		text-indent: -999em;
+		margin: 0;
+		padding: 0;
+		border: none;
+
 
 		a {
 			display: block;
@@ -146,8 +155,18 @@ address {
 
 }
 
+/* =Main content
+-------------------------------------------------------------- */
+
+#main {
+	float: left;
+	width: 100%;
+	padding: 0;
+}
+
 /* =Featured news
 -------------------------------------------------------------- */
+
 #featured-news {
 	position: relative;
 	width: 100%;
@@ -164,7 +183,7 @@ address {
 
 	h1 {
 		width: 60%;
-		margin-bottom: 30px;
+		margin: 0 0 30px 0;
 		padding: 0 20%;
 		color: #fff;
 		text-align: center;
@@ -172,14 +191,15 @@ address {
 		font-size: 3rem;
 		text-shadow: 0 0 2px #000;
 		font-weight: 700;
+		border: none;
 	}
 
 }
 
 /* =Latest news
 -------------------------------------------------------------- */
-#main {
-	float: left;
+
+#latest-news {
 	width: $wrap_width;
 	padding: 0 $wrap_padding 60px $wrap_padding;
 
@@ -432,6 +452,135 @@ address {
 
 }
 
+/* =bbPress layout
+-------------------------------------------------------------- */
+
+#bbpress-wrapper {
+	width: 100%;
+	max-width: 1280px;
+	margin: 0 auto;
+}
+
+#bbpress-forums {
+	float: left;
+	width: 63%;
+	padding: 0 0 60px 0;
+}
+
+#sidebar {
+	float: right;
+	width: 25%;
+	background: #efefef;
+	border-left: 6px solid #aaa;
+	padding: 40px;
+	margin: 0 0 60px 0;
+
+	h3 {
+		color: #000;
+		font-size: 1.6rem;
+		margin: 0 0 20px 0;
+	}
+
+	ul,
+	li {
+		list-style: square;
+	}
+
+	ul {
+		margin: 0 0 60px 0;
+	}
+
+	li {
+		margin: 0 0 0 25px;
+		padding: 5px 0;
+		font-size: 1rem;
+	}
+
+}
+
+.bbp-topic-meta,
+.bbp-topics img,
+.bbp-topic-voice-count,
+#subscription-toggle,
+.bbp-forum-description,
+.bbp-breadcrumb,
+.bbp-template-notice,
+.bbp-topic-description,
+.bbp-pagination-count {
+	display: none;
+}
+
+/* Forums */
+
+.bbp-forum-info {
+	width: 21%;	
+}
+
+.bbp-forum-topic-count {
+	width: 21%;	
+}
+
+.bbp-forum-reply-count {
+	width: 21%;	
+}
+
+.bbp-forum-freshness {
+	width: 21%;	
+}
+
+.bbp-body ul {
+	float: left;
+	width:100%;
+}
+
+/* Topics */
+.forum-titles {
+	float: left;
+	width: 100%;
+	background: $light_background_colour;
+}
+
+.bbp-header,
+.bbp-body,
+.bbp-footer {
+	width: 100%;
+
+	.odd li {
+		background: #fff;
+	}
+
+	li {
+		float: left;
+		padding: 20px 2%;
+		background: $forum_odd_background;
+	}
+
+}
+
+.bbp-header {
+
+	li {
+		padding: 10px 2%;
+	}
+
+}
+
+.bbp-topic-title {
+	width: 56%;
+}
+
+.bbp-topic-reply-count {
+	width: 11%;
+}
+
+.bbp-topic-freshness {
+	width: 21%;
+}
+
+.bbp-submit-wrapper {
+	margin-top: 40px;
+}
+
 /* =Typography
 -------------------------------------------------------------- */
 h1,
@@ -445,8 +594,73 @@ h6 {
 	font-weight: 400;
 }
 
+h1 {
+	font-size: 2.2rem;
+	font-weight: 600;
+	margin: 80px 0 40px 0;
+	padding: 0 0 60px 0;
+	border-bottom: 1px solid #ccc;
+}
+
 h2 {
 	font-size: 1.6rem;
+}
+
+textarea,
+label,
+input,
+legend,
+p,
+li {
+	font-family: $paragraph_font;
+	font-size: 1.2rem;
+}
+
+textarea,
+input {
+	padding: 10px 20px;
+}
+
+textarea {
+	width: 100%;
+	margin: 0 0 20px 0;
+}
+
+label {
+	display: inline-block;
+	margin: 20px 0 0 0;
+	font-size: 1rem;
+}
+
+input {
+	display: block;
+	margin: 5px 0 20px 0;	
+}
+
+input#bbp_topic_subscription {
+	display: inline-block;
+}
+
+select {
+	display: inline-block;
+	font-size: 1rem;
+}
+
+.bbp-topic-form br {
+	display: none;
+}
+
+/* =Links
+-------------------------------------------------------------- */
+
+a {
+	color: $red;
+	text-decoration: none;
+
+	&:hover {
+		text-decoration: underline;
+	}
+
 }
 
 /* =Buttons
@@ -460,6 +674,8 @@ h2 {
 	color: #fff;
 	text-transform: uppercase;
 	font-weight: 800;
+	border: none;
+	outline: none;
 
 	text-decoration: none;
 

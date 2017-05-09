@@ -1,5 +1,7 @@
 <?php
 
+require( 'inc/class-src-bbpress.php' );
+
 /**
  * Primary class used to load the theme.
  *
