@@ -5,12 +5,14 @@
 		function (){
 			set_featured_news_height();
 			set_article_widths();
+			set_standings_sidebars();
 		}
 	);
 
 	window.addEventListener("resize", function() {
 		set_featured_news_height();
 		set_article_widths();
+		set_standings_sidebars();
 	});
 
 	function set_featured_news_height() {
@@ -68,6 +70,17 @@
 			}
 
 		}
+
+	}
+
+	function set_standings_sidebars() {
+
+			var sidebars = document.getElementsByClassName("other-race");
+			var count = 0;
+			for ( count = sidebars.length - 1; count >= 0; count--) {
+				sidebar = sidebars[count];
+				sidebar.style.height = document.getElementById("standings").clientHeight + "px";
+			}
 
 	}
 
