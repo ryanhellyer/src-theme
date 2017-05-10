@@ -59,8 +59,8 @@ if ( is_front_page() ) {
 
 <?php } else { ?>
 
-<section id="featured-news" style="background-image: url(http://dev-hellyer.kiwi/bbpress/wp-content/themes/src-theme/images/featured-image.jpg);">
-</section><!-- #featured-news --><?php
+<div id="header-section">
+</div><!-- #header-section --><?php
 }
 ?>
 

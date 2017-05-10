@@ -18,7 +18,9 @@ if ( have_posts() ) {
 	while ( have_posts() ) {
 		the_post();
 
-		?>
+
+		if ( ! bbp_is_single_user() ) {
+			?>
 
 			<header class="entry-header">
 				<h1>
@@ -33,12 +35,10 @@ if ( have_posts() ) {
 
 					?>
 				</h1>
-			</header><!-- .entry-header -->
+			</header><!-- .entry-header --><?php
+		}
 
-			<?php the_content(); ?>
-
-		<?php
-
+		the_content();
 	}
 
 	get_template_part( 'template-parts/numeric-pagination' );

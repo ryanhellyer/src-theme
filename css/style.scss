@@ -196,6 +196,14 @@ address {
 
 }
 
+/* =Header section
+-------------------------------------------------------------- */
+
+#header-section {
+	width: 100%;
+	height: 140px;
+}
+
 /* =Latest news
 -------------------------------------------------------------- */
 
@@ -452,20 +460,8 @@ address {
 
 }
 
-/* =bbPress layout
+/* =Sidebar
 -------------------------------------------------------------- */
-
-#bbpress-wrapper {
-	width: 100%;
-	max-width: 1280px;
-	margin: 0 auto;
-}
-
-#bbpress-forums {
-	float: left;
-	width: 63%;
-	padding: 0 0 60px 0;
-}
 
 #sidebar {
 	float: right;
@@ -498,6 +494,26 @@ address {
 
 }
 
+/* =bbPress layout
+-------------------------------------------------------------- */
+
+#bbpress-wrapper {
+	width: 100%;
+	max-width: 1280px;
+	margin: 0 auto;
+}
+
+#bbpress-forums {
+	float: left;
+	width: 63%;
+	padding: 0 0 60px 0;
+}
+
+.bbp-topic-form br,
+.bbp-admin-links a.bbp-topic-super-sticky-link,
+.bbp-author-role,
+.bbp-footer,
+.bbp-form legend,
 .bbp-topic-meta,
 .bbp-topics img,
 .bbp-topic-voice-count,
@@ -512,16 +528,28 @@ address {
 
 /* Forums */
 
+.bbp-header li {
+	font-weight: 600;
+}
+
+.bbp-header li,
+.bbp-body .bbp-forum-freshness,
+.bbp-forum-content {
+	font-size: 0.9rem;
+}
+
 .bbp-forum-info {
-	width: 21%;	
+	width: 41%;	
 }
 
 .bbp-forum-topic-count {
-	width: 21%;	
+	width: 11%;
+	text-align: center;
 }
 
 .bbp-forum-reply-count {
-	width: 21%;	
+	width: 11%;	
+	text-align: center;
 }
 
 .bbp-forum-freshness {
@@ -581,6 +609,139 @@ address {
 	margin-top: 40px;
 }
 
+/* Posts */
+.bbp-pagination-links {
+	float: left;
+	width: 100%;
+	font-family: $paragraph_font;
+	font-size: 1em;
+	margin: 40px 0;
+
+	a {
+		display: inline-block;
+		padding: 0 5px;
+	}
+
+}
+
+.bbp-replies {
+	.bbp-header {
+		display: none;
+	}
+}
+
+.bbp-reply-header {
+	text-align: center;
+	font-size: 0.8rem;
+	margin-top: 40px;
+}
+
+.type-topic,
+.type-reply {
+	border-bottom: 1px solid #ccc;
+	float: left;
+	width: 100%;
+	padding: 0 0 40px 0;
+}
+
+.bbp-reply-permalink,
+.bbp-reply-post-date {
+	display: inline-block;
+	color: #666;
+}
+
+/* Icons */
+.bbp-admin-links {
+	display: block;
+	text-indent: -999em;
+
+	a {
+		margin-left: 4px;
+		float: right;
+		width: 14px;
+		height: 14px;
+		background-color: rgba(255,0,0,0.2);
+		background-size: 100%;
+	}
+
+}
+
+.bbp-reply-edit-link,
+.bbp-topic-edit-link {
+	background-image: url(../images/icon-edit.png);
+}
+
+.bbp-reply-move-link,
+.bbp-topic-move-link {
+	background-image: url(../images/icon-move.png);
+}
+
+.bbp-reply-split-link,
+.bbp-topic-split-link {
+	background-image: url(../images/icon-split.png);
+}
+
+.bbp-reply-close-link,
+.bbp-topic-close-link {
+	background-image: url(../images/icon-close.png);
+}
+
+.bbp-reply-sticky-link,
+.bbp-topic-sticky-link {
+	background-image: url(../images/icon-sticky.png);
+}
+
+.bbp-reply-super-sticky-link,
+.bbp-topic-super-sticky-link {
+	background-image: url(../images/icon-sticky.png);
+}
+
+.bbp-reply-merge-link,
+.bbp-topic-merge-link {
+	background-image: url(../images/icon-merge.png);
+}
+
+.bbp-reply-trash-link,
+.bbp-topic-trash-link {
+	background-image: url(../images/icon-trash.png);
+}
+
+.bbp-reply-spam-link,
+.bbp-topic-spam-link {
+	background-image: url(../images/icon-spam.png);
+}
+
+.bbp-reply-to-link,
+.bbp-topic-reply-link {
+	background-image: url(../images/icon-reply.png);
+}
+
+.bbp-meta {
+	float: right;
+}
+
+.bbp-reply-header,
+#bbpress-forums .reply {
+	float: left;
+	width: 100%;
+}
+
+.bbp-reply-author {
+	float: left;
+	width: 25%;
+}
+
+.bbp-reply-content {
+	float: right;
+	width: 75%;
+}
+
+.bbp-reply-signature p {
+	font-size: 1rem;
+	color: #666;
+	margin: 10px 0;
+}
+
 /* =Typography
 -------------------------------------------------------------- */
 h1,
@@ -616,14 +777,18 @@ li {
 	font-size: 1.2rem;
 }
 
-textarea,
+p {
+	margin: 10px 0 30px 0;
+}
+
 input {
 	padding: 10px 20px;
 }
 
 textarea {
-	width: 100%;
+	width: 96%;
 	margin: 0 0 20px 0;
+	padding: 10px 2%;
 }
 
 label {
@@ -646,8 +811,8 @@ select {
 	font-size: 1rem;
 }
 
-.bbp-topic-form br {
-	display: none;
+img {
+	max-width: 100%;
 }
 
 /* =Links
