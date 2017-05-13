@@ -29,14 +29,20 @@ class SRC_bbPress {
 		add_filter('bbp_get_reply_author_avatar', array( $this, 'change_avatar_size' ), 20, 3);
 		add_filter('bbp_get_current_user_avatar', array( $this, 'change_avatar_size' ), 20, 3);
 
-
-
 	}
 
 	/**
 	 * Init.
 	 */
 	public function init() {
+
+		register_nav_menus(
+			array(
+				'header'       => __( 'Header Menu' ),
+				'social-links' => __( 'Social Links Menu' ),
+				'footer'       => __( 'Footer Menu' ),
+			)
+		);
 
 		remove_action( 'wp_print_styles', 'bbp_signature_css' );
 

@@ -342,12 +342,13 @@ address {
 	.other-race {
 		float: left;
 		position: relative;
-		width: 25%;
+		width: 20%;
 		background-size: cover;
 
 		h2 {
 			color: #fff;
 			padding: 40px 30px 200px 30px;
+			font-weight: 600;
 			text-transform: uppercase;
 			font-size: 2.3rem;
 		}
@@ -368,7 +369,7 @@ address {
 
 	#standings {
 		float: left;
-		width: 50%;
+		width: 60%;
 		background: #fff;
 		padding-bottom: 60px;
 
@@ -532,6 +533,7 @@ address {
 	font-weight: 600;
 }
 
+.bbp-author-ip,
 .bbp-header li,
 .bbp-body .bbp-forum-freshness,
 .bbp-forum-content {

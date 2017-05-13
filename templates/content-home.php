@@ -40,7 +40,9 @@
 					<date>05 May 2017</date>
 				</header>
 				<p>
-					Season 3 standings: Latvians dominate AM division
+					PERHAPS LIMIT TO ONLY THREE, SINCE CAN'T SCROLL TO HERE ON MOBILE ANYWAY.
+					<BR><BR>
+					ALSO, MAKE EACH BOX IDENTICAL HEIGHT.
 				</p>
 			</article>
 
@@ -54,7 +56,7 @@
 			<li class="post-1 slide">
 				<div>
 					<img src="http://dev-hellyer.kiwi/bbpress/wp-content/themes/src-theme/images/flag1.png" />
-					Monaco
+					Monaco - PERHAPS REMOVE THE FLAG AND ONLY HAVE BIG DATE, FOLLOWED BY RACE TRACK
 					<date>
 						<span>28</span>
 						May
@@ -77,10 +79,19 @@
 					Laguna Seca
 					<h2>Round 3: Laguna Seca</h2>
 					<span>
-						Race: <date>20:00 CET Saturday July 21 2017</date>
+						Race 2: <date>20:50 CET Saturday July 21 2017</date>
 					</span>
 					<span>
-						Practice: <date>20:00 CET Friday July 20 2017</date>
+						Race 1: <date>20:00 CET Saturday July 21 2017</date>
+					</span>
+					<span>
+						Qualifying: <date>19:40 CET Saturday July 21 2017</date>
+					</span>
+					<span>
+						Free Practice 2: <date>20:00 CET Friday July 20 2017</date>
+					</span>
+					<span>
+						Free Practice 1: <date>20:00 CET Friday July 20 2017</date>
 					</span>
 					</div>
 			</li>
@@ -136,6 +147,7 @@
 	</div>
 
 	<div id="standings">
+		<h3>Driver Standings</h3>
 		<ul>
 			<li>Pro Drivers</li>
 			<li>Am Drivers</li>
@@ -193,7 +205,7 @@
 			</tr>
 		</table>
 
-		<a href="#" class="highlighted-link">See full championship standings</a>
+		<a href="#" class="highlighted-link">See all championship standings</a>
 
 	</div>
 

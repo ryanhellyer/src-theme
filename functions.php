@@ -1,6 +1,12 @@
 <?php
 
+//require( 'example-functions.php' );
+require( 'test.php' );
+
 require( 'inc/class-src-bbpress.php' );
+require( 'inc/class-src-events.php' );
+require( 'inc/class-src-results.php' );
+require( 'inc/class-src-admin.php' );
 
 /**
  * Primary class used to load the theme.

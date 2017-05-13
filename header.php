@@ -23,14 +23,21 @@
 <header id="site-header" role="banner">
 	<h1><a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php esc_attr_e( get_bloginfo( 'name', 'display' ) ); ?>"><?php esc_html_e( get_bloginfo( 'name', 'display' ) ); ?></a></h1>
 	<nav>
-		<ul>
-			<li><a href="#">Forum</a></li>
-			<li><a href="#">Schedule</a></li>
-			<li><a href="#">Results</a></li>
-			<li><a href="#">Live Timing</a></li>
-			<li><a href="#">Gallery</a></li>
-			<li><?php
+		<ul><?php
 
+			echo "\n\n";
+
+			// Output header menu
+			wp_nav_menu(
+				array(
+					'theme_location' => 'header',
+					'container'      => '',
+					'items_wrap'     => '%3$s',
+				)
+			);
+
+			// Custom craft final menu item ourselves
+			echo "\n\t\t\t<li>";
 			if ( is_user_logged_in() ) {
 				echo '
 				<span>Welcome</span>
@@ -40,9 +47,10 @@
 				<span>Join us</span>
 				<a href="#">Log in</a> or <a href="#">Register</a>';
 			}
+			echo "\n\t\t\t</li>";
+
 			?>
 
-			</li>
 		</ul>
 	</nav>
 </header><!-- #site-header -->
