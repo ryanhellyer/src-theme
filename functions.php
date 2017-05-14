@@ -1,7 +1,6 @@
 <?php
 
-//require( 'example-functions.php' );
-require( 'test.php' );
+require( 'test/add-options-example.php' );
 
 require( 'inc/class-src-bbpress.php' );
 require( 'inc/class-src-events.php' );
