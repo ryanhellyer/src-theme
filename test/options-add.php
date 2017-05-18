@@ -7,7 +7,7 @@
  * @author Ryan Hellyer <ryanhellyergmail.com>
  * @since 1.0
  */
-class Example_Options_Page_With_Rows {
+class Example_Options_Page_With_Rows extends SRC_Core {
 
 	/**
 	 * Set some constants for setting options.
@@ -16,15 +16,28 @@ class Example_Options_Page_With_Rows {
 	const GROUP     = 'example-group';
 	const OPTION    = 'example-option';
 
+	public $keys;
+
 	/**
 	 * Fire the constructor up :)
 	 */
 	public function __construct() {
+return;
+		$this->keys = array(
+			'position',
+			'hours',
+			'minutes',
+			'seconds',
+			'dnf',
+		);
 
 		// Add to hooks
 		add_action( 'admin_init',     array( $this, 'register_settings' ) );
 		add_action( 'admin_menu',     array( $this, 'create_admin_page' ) );
 		add_action( 'admin_footer',   array( $this, 'scripts' ) );
+
+		add_action( 'add_meta_boxes', array( $this, 'add_metabox' ) );
+//		add_action( 'save_post',      array( $this, 'meta_boxes_save' ), 10, 2 );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 	}
@@ -41,6 +54,23 @@ class Example_Options_Page_With_Rows {
 	}
 
 	/**
+	 * Add admin metabox.
+	 */
+	public function add_metabox() {
+		add_meta_box(
+			'example', // ID
+			__( 'Example meta box', 'plugin-slug' ), // Title
+			array(
+				$this,
+				'meta_box', // Callback to method to display HTML
+			),
+			'results', // Post type
+			'normal', // Context, choose between 'normal', 'advanced', or 'side'
+			'default'  // Position, choose between 'high', 'core', 'default' or 'low'
+		);
+	}
+
+	/**
 	 * Create the page and add it to the menu.
 	 */
 	public function create_admin_page() {
@@ -49,55 +79,49 @@ class Example_Options_Page_With_Rows {
 			__ ( 'Example page', 'plugin-slug' ),       // Menu title
 			'manage_options',                           // Capability required
 			self::MENU_SLUG,                            // The URL slug
-			array( $this, 'admin_page' )                // Displays the admin page
+			array( $this, 'meta_box' )                // Displays the admin page
 		);
 	}
 
 	/**
 	 * Output the admin page.
 	 */
-	public function admin_page() {
+	public function meta_box() {
 
 		?>
 		<div class="wrap">
 			<h2><?php _e( 'Example admin page', 'plugin-slug' ); ?></h2>
 			<p><?php _e( 'Place a description of what the admin page does here to help users make better use of the admin page.', 'plugin-slug' ); ?></p>
 
-			<form method="post" action="options.php" enctype="multipart/form-data">
+			<form method="post" action="options.php">
 
 				<table class="wp-list-table widefat plugins">
 					<thead>
 						<tr>
-							<th class='check-column'>
-								<label class="screen-reader-text" for="cb-select-all-1">Alle auswählen</label>
-								<input id="cb-select-all-1" type="checkbox" />
+							<th class='column-author'>
+								Driver
 							</th>
 							<th class='column-author'>
-								Autor
+								Time
 							</th>
+
 							<th class='column-author'>
-								Autor
-							</th>
-							<th class='column-author'>
-								Autor
+								DNF?
 							</th>
 						</tr>
 					</thead>
 
 					<tfoot>
 						<tr>
-							<th class='check-column'>
-								<label class="screen-reader-text" for="cb-select-all-1">Alle auswählen</label>
-								<input id="cb-select-all-1" type="checkbox" />
+							<th class='column-author'>
+								Driver
 							</th>
 							<th class='column-author'>
-								Autor
+								Time
 							</th>
+
 							<th class='column-author'>
-								Autor
-							</th>
-							<th class='column-author'>
-								Autor
+								DNF?
 							</th>
 						</tr>
 					</tfoot>
@@ -141,38 +165,39 @@ class Example_Options_Page_With_Rows {
 			$value = array();
 		}
 
-		if ( ! isset( $value['position'] ) ) {
-			$value['position'] = '';
-		}
+		foreach (
+			$this->keys
+			as $key
+		) {
+			if ( ! isset( $value[ $key ] ) ) {
+				$value [ $key ] = '';
+			}
+		};
 
-		if ( ! isset( $value['time'] ) ) {
-			$value['time'] = '';
+		$options = '<option selected disabled>' . esc_html__( 'Select a driver', 'src' ) . '</option>';
+		foreach ( $this->get_src_users() as $user_id => $name ) {
+			$options .= '<option value="' . esc_attr( $user_id ) . '">' . esc_html( $name ) . '</option>';
 		}
 
 		// Create the required HTML
 		$row_html = '
 
 					<tr class="sortable inactive">
-						<th>
-							<label>' . __( 'Position', 'plugin-slug' ) . '</label>
-						</th>
 						<td>
-							<input type="text" name="' . esc_attr( self::OPTION ) . '[][position]" value="' . esc_attr( $value['position'] ) . '" />
+							<select name="' . esc_attr( self::OPTION ) . '[][driver]">' . $options . '</select>
 						</td>
 						<td>
-							<select>
-								<option>Trek BMC</option>
-								<option>Paul Rosanski</option>
-							</select>
-						</td>
-						<td>
-							<input type="text" name="' . esc_attr( self::OPTION ) . '[][time]" value="' . esc_attr( $value['time'] ) . '" />
+							<label>Hours</label>
+							<input class="small-text" type="number" name="' . esc_attr( self::OPTION ) . '[][hours]" value="' . esc_attr( $value['hours'] ) . '" />
 
-							<label>Incident</label>
-							<select>
-								<option>Trek BMC</option>
-								<option>Paul Rosanski</option>
-							</select>
+							<label>Minutes</label>
+							<input class="small-text" type="number" name="' . esc_attr( self::OPTION ) . '[][minutes]" value="' . esc_attr( $value['minutes'] ) . '" />
+
+							<label>Seconds</label>
+							<input class="small-text" type="number" name="' . esc_attr( self::OPTION ) . '[][seconds]" value="' . esc_attr( $value['seconds'] ) . '" />
+						</td>
+						<td>
+							<input type="checkbox" name="' . esc_attr( self::OPTION ) . '[][time]" />
 						</td>
 					</tr>';
 
@@ -196,13 +221,8 @@ class Example_Options_Page_With_Rows {
 		// Loop through each bit of data
 		foreach( $input as $key => $value ) {
 
-			// Sanitize input data
-			$sanitized_key   = absint( $key );
-			if ( isset( $value['title'] ) ) {
-				$sanitized_value['title'] = wp_kses_post( $value['title'] );
-			}
-			if ( isset( $value['file'] ) ) {
-				$sanitized_value['file'] = wp_kses_post( $value['file'] );
+			foreach ( $this->keys as $key ) {
+				$sanitized_value[ $key ] = wp_kses_post( $value[ $key ] );
 			}
 
 			// Put sanitized data in output variable
@@ -226,18 +246,18 @@ class Example_Options_Page_With_Rows {
 			||
 			! isset( $_GET['page'] )
 		) {
-			return;
+//			return;
 		}
 
 		?>
-<style>
-.read-more-text {
-	display: none;
-}
-.sortable .toggle {
-	display: inline !important;
-}
-</style>
+		<style>
+		.read-more-text {
+			display: none;
+		}
+		.sortable .toggle {
+			display: inline !important;
+		}
+		</style>
 		<script>
 
 			jQuery(function($){ 
@@ -254,7 +274,7 @@ class Example_Options_Page_With_Rows {
 						if(!$(this).find('input').hasClass('remove-setting')) {
 
 							// Add a remove button
-							$(this).append('<td><input type="button" class="remove-setting" value="X" /></td>');
+							$(this).append('<td><input type="button" class="remove-setting" value="&times;" /></td>');
 
 							// Remove button functionality
 							$('.remove-setting').click(function () {

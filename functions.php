@@ -1,11 +1,17 @@
 <?php
 
-require( 'test/add-options-example.php' );
-
+require( 'inc/class-src-core.php' );
 require( 'inc/class-src-bbpress.php' );
 require( 'inc/class-src-events.php' );
 require( 'inc/class-src-results.php' );
 require( 'inc/class-src-admin.php' );
+
+new SRC_Events;
+new SRC_Results;
+new SRC_Admin;
+
+
+require( 'test/add-options-example.php' );
 
 /**
  * Primary class used to load the theme.

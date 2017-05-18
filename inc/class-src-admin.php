@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Ryans Simple CMS Setup
+ * Simplification of the admin panel.
+ * Based on Ryans Simple CMS Setup
  * 
  * @copyright Copyright (c), Ryan Hellyer
  * @author Ryan Hellyer <ryanhellyer@gmail.com>
@@ -69,4 +70,3 @@ class SRC_Admin {
 	}
 	
 }
-new SRC_Admin();
