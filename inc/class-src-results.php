@@ -11,7 +11,7 @@
  */
 class SRC_Results extends SRC_Core {
 
-	const OPTION = 'xxx';
+	const RESULT_KEY = 'result';
 
 	/**
 	 * Constructor.
@@ -20,17 +20,21 @@ class SRC_Results extends SRC_Core {
 	public function __construct() {
 
 		$this->keys = array(
-			'position',
 			'hours',
 			'minutes',
 			'seconds',
-			'dnf',
+			'laps-completed',
+			'time', // Options for seconds behind, laps behind or reason for retirement
+			'consistency',
+			'laps-led',
+			'note', // Penalties or general comments can be left here
 		);
 
 		// Add action hooks
 		add_action( 'init',           array( $this, 'init' ) );
 		add_action( 'admin_footer',   array( $this, 'scripts' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_metabox' ) );
+		add_action( 'save_post',      array( $this, 'save' ), 10, 2 );
 
 	}
 
@@ -43,7 +47,7 @@ class SRC_Results extends SRC_Core {
 			'results' => array(
 				'public' => true,
 				'label'  => 'Results',
-				'supports' => array( 'thumbnail' )
+				'supports' => array( 'title', 'thumbnail' )
 			),
 		);
 
@@ -58,8 +62,8 @@ class SRC_Results extends SRC_Core {
 	 */
 	public function add_metabox() {
 		add_meta_box(
-			'example', // ID
-			__( 'Example meta box', 'plugin-slug' ), // Title
+			'_result', // ID
+			__( 'Enter results here', 'src' ), // Title
 			array(
 				$this,
 				'meta_box', // Callback to method to display HTML
@@ -75,43 +79,179 @@ class SRC_Results extends SRC_Core {
 	 */
 	public function meta_box() {
 
+		// If brand new post
+		if ( ! isset( $_GET['season'] ) && ! isset( $_GET['post'] ) ) {
+			$this->select_event();
+		} else {
+			$this->enter_results();
+		}
+
+if ( isset( $_POST['post'] ) ) {
+echo '<textarea style="font-size:10px;font-family:monospace;">'.print_r( get_post_meta( $_POST['post'] ), true ) . '</textarea>';
+}
+	}
+
+	/**
+	 * Outputting the event selector.
+	 * User selects the event they want to provide results for here first.
+	 */
+	public function select_event() {
+
+		echo '<style>#publish {display:none;}</style>';
+
+		echo '<h3>Select which season, round and event/session</h3>';
+
+		$seasons = get_posts(
+			array(
+				'post_type' => 'season',
+			)
+		);
+
+		if ( is_array( $seasons ) ) {
+			foreach ( $seasons as $key => $season ) {
+				echo '<p>';
+				echo '<h3>' . esc_html( $season->post_title ) . '</h3>';
+
+				$events = get_post_meta( $season->ID, 'event', true );
+
+				echo '<ol>';
+				foreach ( $events as $round_number => $event ) {
+					echo '<li>';
+					echo esc_html( $event['track_name'] );
+
+					echo '<ul>';
+					foreach ( $this->event_types() as $name => $desc ) {
+
+						echo '<li>';
+
+						$key_slug = 'event_' . sanitize_title( $name ) . '_timestamp';
+						if ( isset( $event[$key_slug] ) && '' != $event[$key_slug] ) {
+
+							$url = get_admin_url() . 'post-new.php?post_type=results';
+							$url = add_query_arg( 'season', sanitize_title( $season->post_title ), $url );
+							$url = add_query_arg( 'round', ( $round_number + 1 ), $url );								
+							$url = add_query_arg( 'name', sanitize_title( $name ), $url );
+
+							echo '<li>';
+							echo '<a href="' . esc_url( $url ) . '">';
+							echo ' ' . esc_html( $name );
+							echo '</a>';
+							echo '</li>';
+
+						}
+
+					}
+					echo '</ul>';
+
+					echo '</li>';
+				}
+				echo '</ol>';
+
+				echo '</p>';
+			}
+		}
+
+	}
+
+	/**
+	 * Displays inputs for storing results for the selected event.
+	 */
+	public function enter_results() {
+
+		if ( ! isset( $_GET['season'] ) ) {
+			echo 'Error, no season selected';
+		}
+
+		if ( ! isset( $_GET['name'] ) ) {
+			echo 'Error, no name selected';
+		}
+
+		if ( ! isset( $_GET['round'] ) ) {
+			echo 'Error, no round selected';
+		}
+
+		/**
+		 * Getting event details.
+		 * And confirming that submitted event data is correct.
+		 */
+		$seasons = get_posts(
+			array(
+				'post_type' => 'season',
+			)
+		);
+
+		if ( is_array( $seasons ) ) {
+			foreach ( $seasons as $key => $season ) {
+				if ( $_GET['season'] === sanitize_title( $season->post_title ) ) {
+					$season_title = $season->post_title;
+
+					$events = get_post_meta( $season->ID, 'event', true );
+					foreach ( $events as $round_number => $event ) {
+						if ( (string) ( $round_number + 1 ) === $_GET['round'] ) {
+							$actual_round_number = $round_number + 1;
+							$track_name = $event['track_name'];
+
+							foreach ( $this->event_types() as $name => $desc ) {
+								if ( sanitize_title( $name ) == $_GET['name'] ) {
+									$event_name = $name;
+								}
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+		}
+
+		if ( ! isset( $_GET['post'] ) ) {
+			echo '<script>
+			var result_title = document.getElementById("title");
+			result_title.value = "' . sprintf( __( '%s results', 'src' ), $event_name ) . ': Round ' . esc_html( $actual_round_number ) . ' ' . esc_html( $season_title ) . ' ' . __( 'at', 'src' ) . ' ' . esc_html( $track_name ) . '";
+			</script>';
+		}
+
 		?>
 
 		<table class="wp-list-table widefat plugins">
 			<thead>
 				<tr>
-					<th class='column-author'>
-						Driver
-					</th>
-					<th class='column-author'>
-						Time
-					</th>
-
-					<th class='column-author'>
-						DNF?
-					</th>
+					<th>Driver</th>
+					<th>Time</th>
+					<th>Laps led</th>
+					<th>Consistency</th>
+					<th>Note</th>
+					<th></th>
 				</tr>
 			</thead>
 
 			<tfoot>
 				<tr>
-					<th class='column-author'>
-						Driver
-					</th>
-					<th class='column-author'>
-						Time
-					</th>
-
-					<th class='column-author'>
-						DNF?
-					</th>
+					<th>Driver</th>
+					<th>Time</th>
+					<th>Laps led</th>
+					<th>Consistency</th>
+					<th>Note</th>
+					<th></th>
 				</tr>
 			</tfoot>
 
 			<tbody id="add-rows"><?php
+/*
+			'hours',
+			'minutes',
+			'seconds',
+			'laps-completed',
+			'time', // Options for seconds behind, laps behind or reason for retirement
+			'consistency',
+			'laps-led',
+			'note', // Penalties or general comments can be left here
+*/
 
 			// Grab options array and output a new row for each setting
-			$options = get_option( self::OPTION );
+			$options = get_option( self::RESULT_KEY );
 			if ( is_array( $options ) ) {
 				foreach( $options as $key => $value ) {
 					echo $this->get_row( $value );
@@ -120,11 +260,13 @@ class SRC_Results extends SRC_Core {
 
 			// Add a new row by default
 			echo $this->get_row();
+
 			?>
 			</tbody>
 		</table>
 
-		<input type="button" id="add-new-row" value="<?php _e( 'Add new row', 'plugin-slug' ); ?>" /><?php
+		<input type="button" id="add-new-row" value="<?php _e( 'Add new row', 'plugin-slug' ); ?>" />
+		<input type="hidden" name="result-nonce" value="<?php echo esc_attr( wp_create_nonce( __FILE__ ) ); ?>"><?php
 	}
 
 	/**
@@ -157,21 +299,27 @@ class SRC_Results extends SRC_Core {
 		$row_html = '
 
 					<tr class="sortable inactive">
-						<td>
-							<select name="' . esc_attr( self::OPTION ) . '[][driver]">' . $options . '</select>
+						<td style="width:18%">
+							<select name="' . esc_attr( self::RESULT_KEY ) . '[driver][]">' . $options . '</select>
 						</td>
-						<td>
+						<td style="width:16%">
+							<input class="small-text" style="width:40px" type="number" name="' . esc_attr( self::RESULT_KEY ) . '[hours][]" value="' . esc_attr( $value['hours'] ) . '" />
 							<label>Hours</label>
-							<input class="small-text" type="number" name="' . esc_attr( self::OPTION ) . '[][hours]" value="' . esc_attr( $value['hours'] ) . '" />
-
+							<br />
+							<input class="small-text" style="width:50px" type="number" name="' . esc_attr( self::RESULT_KEY ) . '[minutes][]" value="' . esc_attr( $value['minutes'] ) . '" />
 							<label>Minutes</label>
-							<input class="small-text" type="number" name="' . esc_attr( self::OPTION ) . '[][minutes]" value="' . esc_attr( $value['minutes'] ) . '" />
-
+							<br />
+							<input class="small-text" style="width:50px" type="number" name="' . esc_attr( self::RESULT_KEY ) . '[seconds][]" value="' . esc_attr( $value['seconds'] ) . '" />
 							<label>Seconds</label>
-							<input class="small-text" type="number" name="' . esc_attr( self::OPTION ) . '[][seconds]" value="' . esc_attr( $value['seconds'] ) . '" />
+						</td>
+						<td style="width:10%">
+							<input type="checkbox" name="' . esc_attr( self::RESULT_KEY ) . '[laps-led][]" />
+						</td>
+						<td style="width:10%">
+							<input type="text" name="' . esc_attr( self::RESULT_KEY ) . '[consistency][]" />
 						</td>
 						<td>
-							<input type="checkbox" name="' . esc_attr( self::OPTION ) . '[][time]" />
+							<textarea style="width:100px;height:100px;" name="' . esc_attr( self::RESULT_KEY ) . '[note][]"></textarea>
 						</td>
 					</tr>';
 
@@ -189,13 +337,9 @@ class SRC_Results extends SRC_Core {
 	 */
 	public function scripts() {
 
-		// Bail out if not on correct page
-		if (
-			isset( $_GET['page'] ) && self::MENU_SLUG != $_GET['page']
-			||
-			! isset( $_GET['page'] )
-		) {
-//			return;
+		// Bail out if not on results page
+		if ( 'results' !== get_post_type() ) {
+			return;
 		}
 
 		?>
@@ -223,7 +367,7 @@ class SRC_Results extends SRC_Core {
 						if(!$(this).find('input').hasClass('remove-setting')) {
 
 							// Add a remove button
-							$(this).append('<td><input type="button" class="remove-setting" value="&times;" /></td>');
+							$(this).append('<td style="width:3%;"><input type="button" class="remove-setting" value="&times;" /></td>');
 
 							// Remove button functionality
 							$('.remove-setting').click(function () {
@@ -256,6 +400,46 @@ class SRC_Results extends SRC_Core {
  			});
 
 		</script><?php
+	}
+
+	/**
+	 * Save opening times meta box data.
+	 *
+	 * @param  int     $post_id  The post ID
+	 * @param  object  $post     The post object
+	 */
+	public function save( $post_id, $post ) {
+
+		// Bail out if not processing results
+		if ( 'results' != get_post_type() || ! isset( $_POST['result-nonce'] ) ) {
+			return $post;
+		}
+
+		// Do nonce security check
+		if ( ! wp_verify_nonce( $_POST['result-nonce'], __FILE__ ) ) {
+
+			return $post;
+		}
+
+		$total = count(   $_POST['result']['driver']    );
+
+		$count = 0;
+		$result = array();
+		while ( $count < $total ) {
+
+			foreach ( $this->keys as $key ) {
+				if ( isset( $_POST['result'][$key][$count] ) ) {
+					$result[$count][$key] = wp_kses_post( $_POST['result'][$key][$count] );
+				} else {
+					$result[$count][$key] = '';
+				}
+			}
+
+			$count++;
+		}
+
+		update_post_meta( $post_id, '_result', $result );
+
 	}
 
 }

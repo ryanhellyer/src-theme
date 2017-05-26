@@ -126,16 +126,7 @@ class SRC_Events extends SRC_Core {
 			'type' => 'text',
 		) );
 
-		$times = array(
-			'FP1' => 'Free Practice 1',
-			'FP2' => 'Free Practice 1',
-			'Qualifying' => 'Qualifying',
-			'Race 1' => 'Race 1',
-			'Race 2' => 'Race 2',
-			'Race 3' => 'Race 3',
-		);
-
-		foreach ( $times as $name => $desc ) {
+		foreach ( $this->event_types() as $name => $desc ) {
 
 			$cmb->add_group_field( $group_field_id, array(
 				'name' => esc_html( $name ) . ' date/time',
