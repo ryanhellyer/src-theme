@@ -20,6 +20,7 @@ class SRC_Results extends SRC_Core {
 	public function __construct() {
 
 		$this->keys = array(
+			'driver',
 			'hours',
 			'minutes',
 			'seconds',
@@ -158,17 +159,38 @@ echo '<textarea style="font-size:10px;font-family:monospace;">'.print_r( get_pos
 	 */
 	public function enter_results() {
 
-		if ( ! isset( $_GET['season'] ) ) {
-			echo 'Error, no season selected';
+		if ( isset( $_GET['season'] ) ) {
+			$season = esc_html( $_GET['season'] );
+			update_post_meta( get_the_ID(), '_season', $season );
+		} else {
+			$season = get_post_meta( get_the_ID(), '_season', true );
 		}
 
-		if ( ! isset( $_GET['name'] ) ) {
-			echo 'Error, no name selected';
+		if ( isset( $_GET['name'] ) ) {
+			$name = esc_html( $_GET['name'] );
+			update_post_meta( get_the_ID(), '_name', $name );
+		} else {
+			$name = get_post_meta( get_the_ID(), '_name', true );
 		}
 
-		if ( ! isset( $_GET['round'] ) ) {
-			echo 'Error, no round selected';
+		if ( isset( $_GET['round'] ) ) {
+			$round = esc_html( $_GET['round'] );
+			update_post_meta( get_the_ID(), '_round', $round );
+		} else {
+			$round = get_post_meta( get_the_ID(), '_round', true );
 		}
+
+		echo '
+		<p>
+			<label>' . esc_html__( 'Season', 'src' ) . '</label>
+			<input type="text" name="season" value="' . esc_attr( $season ) . '" />
+			 &nbsp; 
+			<label>' . esc_html__( 'Name', 'src' ) . '</label>
+			<input type="text" name="name" value="' . esc_attr( $name ) . '" />
+			 &nbsp; 
+			<label>' . esc_html__( 'Round number', 'src' ) . '</label>
+			<input type="text" name="round" value="' . esc_attr( $round ) . '" />
+		</p>';
 
 		/**
 		 * Getting event details.
@@ -181,18 +203,18 @@ echo '<textarea style="font-size:10px;font-family:monospace;">'.print_r( get_pos
 		);
 
 		if ( is_array( $seasons ) ) {
-			foreach ( $seasons as $key => $season ) {
-				if ( $_GET['season'] === sanitize_title( $season->post_title ) ) {
-					$season_title = $season->post_title;
+			foreach ( $seasons as $key => $the_season ) {
+				if ( $season === sanitize_title( $the_season->post_title ) ) {
+					$season_title = $the_season->post_title;
 
-					$events = get_post_meta( $season->ID, 'event', true );
+					$events = get_post_meta( $the_season->ID, 'event', true );
 					foreach ( $events as $round_number => $event ) {
-						if ( (string) ( $round_number + 1 ) === $_GET['round'] ) {
+						if ( (string) ( $round_number + 1 ) === $round ) {
 							$actual_round_number = $round_number + 1;
 							$track_name = $event['track_name'];
 
 							foreach ( $this->event_types() as $name => $desc ) {
-								if ( sanitize_title( $name ) == $_GET['name'] ) {
+								if ( sanitize_title( $name ) == $name ) {
 									$event_name = $name;
 								}
 							}
@@ -251,9 +273,9 @@ echo '<textarea style="font-size:10px;font-family:monospace;">'.print_r( get_pos
 */
 
 			// Grab options array and output a new row for each setting
-			$options = get_option( self::RESULT_KEY );
-			if ( is_array( $options ) ) {
-				foreach( $options as $key => $value ) {
+			$result = get_post_meta( get_the_ID(), '_' . self::RESULT_KEY, true );
+			if ( is_array( $result ) ) {
+				foreach( $result as $key => $value ) {
 					echo $this->get_row( $value );
 				}
 			}
@@ -292,7 +314,12 @@ echo '<textarea style="font-size:10px;font-family:monospace;">'.print_r( get_pos
 
 		$options = '<option selected disabled>' . esc_html__( 'Select a driver', 'src' ) . '</option>';
 		foreach ( $this->get_src_users() as $user_id => $name ) {
-			$options .= '<option value="' . esc_attr( $user_id ) . '">' . esc_html( $name ) . '</option>';
+			if ( $value['driver'] == $user_id ) {
+				$selected = ' selected="selected"';
+			} else {
+				$selected = '';
+			}
+			$options .= '<option' . $selected. ' value="' . esc_attr( $user_id ) . '">' . esc_html( $name ) . '</option>';
 		}
 
 		// Create the required HTML
@@ -438,7 +465,7 @@ echo '<textarea style="font-size:10px;font-family:monospace;">'.print_r( get_pos
 			$count++;
 		}
 
-		update_post_meta( $post_id, '_result', $result );
+		update_post_meta( $post_id, '_' . self::RESULT_KEY, $result );
 
 	}
 
