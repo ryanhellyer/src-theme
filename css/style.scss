@@ -74,24 +74,26 @@ address {
 	width: 100%;
 	height: $header_height;
 	box-shadow: 0 0 15px rgba(0,0,0,0.9);
+	font-family: $button_font;
 
 	h1 {
-		position: absolute;
-		top: 5px;
-		left: 30px;
+		float: left;
+		margin: 5px 0 0 30px;
 		width: 215px;
 		height: 64px;
 		background: url(../images/logo.png);
 		text-indent: -999em;
-		margin: 0;
 		padding: 0;
 		border: none;
-
 
 		a {
 			display: block;
 		}
 
+	}
+
+	nav {
+		float: left;
 	}
 
 	ul {
@@ -107,48 +109,7 @@ address {
 		font-weight: 800;
 
 		&:first-child {
-			margin-left: 270px;
-		}
-
-		&:last-child {
-			float: right;
-			position: relative;
-			background: $red;
-			height: 60px;
-			color: #fff;
-			padding: 10px 20px 0 20px;
-			font-size: 0.9rem;
-			font-weight: 400;
-
-			&:before {
-				display: block;
-				content: "";
-				position: absolute;
-				top: 0;
-				left: -20px;
-				width: 20px;
-				height: $header_height;
-				background: $red;
-				-webkit-clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%, 0 0);
-				clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%, 0 0);
-			}
-
-			span {
-				font-weight: 700;
-				display: block;
-				font-size: 1.5rem;
-				margin-bottom: 7px;
-			}
-
-			a {
-				display: inline;
-				font-weight: 700;
-				height: auto;
-				line-height: 1;
-				padding: 0;
-				margin: 0;
-			}
-
+			margin-left: 40px;
 		}
 
 		a {
@@ -163,6 +124,48 @@ address {
 				background: #222;
 			}
 
+		}
+
+	}
+
+	.sign-up {
+		float: right;
+		position: relative;
+		background: $red;
+		height: 60px;
+		color: #fff;
+		padding: 10px 20px 0 20px;
+		font-size: 0.9rem;
+		font-weight: 400;
+		text-transform: uppercase;
+
+		&:before {
+			display: block;
+			content: "";
+			position: absolute;
+			top: 0;
+			left: -20px;
+			width: 20px;
+			height: $header_height;
+			background: $red;
+			-webkit-clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%, 0 0);
+			clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%, 0 0);
+		}
+
+		span {
+			font-weight: 700;
+			display: block;
+			font-size: 1.5rem;
+			margin-bottom: 7px;
+		}
+
+		a {
+			display: inline;
+			font-weight: 700;
+			height: auto;
+			line-height: 1;
+			padding: 0;
+			margin: 0;
 		}
 
 	}
@@ -988,12 +991,37 @@ a {
 @media only screen and (max-width: 1024px) {
 
 	#site-header {
+		text-align: center;
+
 		li {
 			display: none;
 			&:last-child {
 				display: block;
 			}
 		}
+
+		h1 {
+			float: none;
+			display: inline-block;
+		}
+
+		nav {
+			float: left;
+			position: relative;
+
+			&:before {
+				position: absolute;
+				left: 10px;
+				top: 10px;
+				display: block;
+				width: 60px;
+				height: 70px;
+				content: "X";
+				color: #fff;
+			}
+
+		}
+
 	}
 
 	#schedule {

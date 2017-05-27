@@ -21,6 +21,7 @@
 <a class="skip-link screen-reader-text" href="#main"><?php esc_html_e( 'Skip to content', 'hellish-simplicity' ); ?></a>
 
 <header id="site-header" role="banner">
+	<a class="sign-up" href="#">Welcome <span>View Profile</span></a>
 	<h1><a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php esc_attr_e( get_bloginfo( 'name', 'display' ) ); ?>"><?php esc_html_e( get_bloginfo( 'name', 'display' ) ); ?></a></h1>
 	<nav>
 		<ul><?php
@@ -42,6 +43,7 @@
 
 		</ul>
 	</nav>
+
 </header><!-- #site-header -->
 
 <?php

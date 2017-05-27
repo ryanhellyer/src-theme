@@ -49,20 +49,21 @@ address {
   background: #202020;
   width: 100%;
   height: 70px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.9); }
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.9);
+  font-family: "Open Sans", sans-serif; }
   #site-header h1 {
-    position: absolute;
-    top: 5px;
-    left: 30px;
+    float: left;
+    margin: 5px 0 0 30px;
     width: 215px;
     height: 64px;
     background: url(../images/logo.png);
     text-indent: -999em;
-    margin: 0;
     padding: 0;
     border: none; }
     #site-header h1 a {
       display: block; }
+  #site-header nav {
+    float: left; }
   #site-header ul {
     float: left;
     width: 100%; }
@@ -73,39 +74,7 @@ address {
     text-transform: uppercase;
     font-weight: 800; }
     #site-header li:first-child {
-      margin-left: 270px; }
-    #site-header li:last-child {
-      float: right;
-      position: relative;
-      background: #cd0203;
-      height: 60px;
-      color: #fff;
-      padding: 10px 20px 0 20px;
-      font-size: 0.9rem;
-      font-weight: 400; }
-      #site-header li:last-child:before {
-        display: block;
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -20px;
-        width: 20px;
-        height: 70px;
-        background: #cd0203;
-        -webkit-clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%, 0 0);
-        clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%, 0 0); }
-      #site-header li:last-child span {
-        font-weight: 700;
-        display: block;
-        font-size: 1.5rem;
-        margin-bottom: 7px; }
-      #site-header li:last-child a {
-        display: inline;
-        font-weight: 700;
-        height: auto;
-        line-height: 1;
-        padding: 0;
-        margin: 0; }
+      margin-left: 40px; }
     #site-header li a {
       display: block;
       color: #fff;
@@ -115,6 +84,39 @@ address {
       text-decoration: none; }
       #site-header li a:hover {
         background: #222; }
+  #site-header .sign-up {
+    float: right;
+    position: relative;
+    background: #cd0203;
+    height: 60px;
+    color: #fff;
+    padding: 10px 20px 0 20px;
+    font-size: 0.9rem;
+    font-weight: 400;
+    text-transform: uppercase; }
+    #site-header .sign-up:before {
+      display: block;
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -20px;
+      width: 20px;
+      height: 70px;
+      background: #cd0203;
+      -webkit-clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%, 0 0);
+      clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%, 0 0); }
+    #site-header .sign-up span {
+      font-weight: 700;
+      display: block;
+      font-size: 1.5rem;
+      margin-bottom: 7px; }
+    #site-header .sign-up a {
+      display: inline;
+      font-weight: 700;
+      height: auto;
+      line-height: 1;
+      padding: 0;
+      margin: 0; }
 
 /* =Main content
 -------------------------------------------------------------- */
@@ -701,10 +703,27 @@ a {
 /* =Smaller devices
 -------------------------------------------------------------- */
 @media only screen and (max-width: 1024px) {
-  #site-header li {
-    display: none; }
-    #site-header li:last-child {
-      display: block; }
+  #site-header {
+    text-align: center; }
+    #site-header li {
+      display: none; }
+      #site-header li:last-child {
+        display: block; }
+    #site-header h1 {
+      float: none;
+      display: inline-block; }
+    #site-header nav {
+      float: left;
+      position: relative; }
+      #site-header nav:before {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        display: block;
+        width: 60px;
+        height: 70px;
+        content: "X";
+        color: #fff; }
 
   #schedule {
     width: 100%;
