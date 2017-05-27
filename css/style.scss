@@ -980,15 +980,15 @@ a {
 		}
 
 		&[href*="twitter.com"]:before {
-			content: "\ea96";
+			content: "\e901";
 		}
 
 		&[href*="youtube.com"]:before {
-			content: "\ea9d";
+			content: "\e903";
 		}
 
 		&[href*="facebook.com"]:before {
-			content: "\ea90";
+			content: "\e902";
 		}
 
 		&:hover {
@@ -1007,10 +1007,22 @@ a {
 	#site-header {
 		text-align: center;
 
-		li {
+		ul {
 			display: none;
-			&:last-child {
-				display: block;
+			position: absolute;
+			left: 10px;
+			top: 60px;
+			background: $dark_background_colour;
+			width: 300px;
+		}
+
+		li {
+			display: block;
+			width: 300px;
+			text-align: left;
+
+			&:first-child {
+				margin-left: 0;
 			}
 		}
 
@@ -1023,6 +1035,14 @@ a {
 			float: left;
 			position: relative;
 
+			&.open {
+
+				ul {
+					display: block;
+				}
+
+			}
+
 			&:before {
 				position: absolute;
 				left: 10px;
@@ -1030,8 +1050,20 @@ a {
 				display: block;
 				width: 60px;
 				height: 70px;
-				content: "X";
 				color: #fff;
+				font-family: icomoon;
+				font-size: 2rem;
+				content: "\e900";
+			}
+
+			&:hover {
+				cursor: pointer;
+			}
+
+			&.open {
+				&:before {
+					content: "\e904";
+				}
 			}
 
 		}

@@ -23,8 +23,8 @@
 <header id="site-header" role="banner">
 	<a class="sign-up" href="#">Welcome <span>View Profile</span></a>
 	<h1><a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php esc_attr_e( get_bloginfo( 'name', 'display' ) ); ?>"><?php esc_html_e( get_bloginfo( 'name', 'display' ) ); ?></a></h1>
-	<nav>
-		<ul><?php
+	<nav id="main-menu-wrap">
+		<ul id="main-menu"><?php
 
 			echo "\n\n";
 

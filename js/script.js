@@ -9,6 +9,32 @@
 		}
 	);
 
+	/**
+	 * Handle clicks.
+	 */
+	window.addEventListener(
+		'click',
+		function (e){
+
+			// Menu button click
+			var main_menu_wrap = document.getElementById( 'main-menu-wrap' );
+			if (
+				'main-menu-wrap' === e.target.id
+				&&
+				'open' != main_menu_wrap.className
+			) {
+				main_menu_wrap.classList.add('open');
+			} else if (
+				'open' === main_menu_wrap.className
+				||
+				'main-menu-wrap' === e.target.id
+			) {
+				main_menu_wrap.classList.remove('open');
+			}
+
+		}
+	);
+
 	window.addEventListener("resize", function() {
 		set_featured_news_height();
 		set_article_widths();

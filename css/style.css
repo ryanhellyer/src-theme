@@ -702,11 +702,11 @@ a {
       padding: 10px;
       margin-top: -10px; }
     #site-footer a[href*="twitter.com"]:before {
-      content: "\ea96"; }
+      content: "\e901"; }
     #site-footer a[href*="youtube.com"]:before {
-      content: "\ea9d"; }
+      content: "\e903"; }
     #site-footer a[href*="facebook.com"]:before {
-      content: "\ea90"; }
+      content: "\e902"; }
     #site-footer a:hover {
       text-decoration: underline;
       color: #aaa; }
@@ -716,16 +716,27 @@ a {
 @media only screen and (max-width: 1024px) {
   #site-header {
     text-align: center; }
+    #site-header ul {
+      display: none;
+      position: absolute;
+      left: 10px;
+      top: 60px;
+      background: #202020;
+      width: 300px; }
     #site-header li {
-      display: none; }
-      #site-header li:last-child {
-        display: block; }
+      display: block;
+      width: 300px;
+      text-align: left; }
+      #site-header li:first-child {
+        margin-left: 0; }
     #site-header h1 {
       float: none;
       display: inline-block; }
     #site-header nav {
       float: left;
       position: relative; }
+      #site-header nav.open ul {
+        display: block; }
       #site-header nav:before {
         position: absolute;
         left: 10px;
@@ -733,8 +744,14 @@ a {
         display: block;
         width: 60px;
         height: 70px;
-        content: "X";
-        color: #fff; }
+        color: #fff;
+        font-family: icomoon;
+        font-size: 2rem;
+        content: "\e900"; }
+      #site-header nav:hover {
+        cursor: pointer; }
+      #site-header nav.open:before {
+        content: "\e904"; }
 
   #schedule {
     width: 100%;
