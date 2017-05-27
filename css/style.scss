@@ -518,10 +518,11 @@ address {
 	float: left;
 	width: 63%;
 	padding: 0 0 60px 0;
-}
 
-.bbp-breadcrumb {
-	
+	.bbp-breadcrumb {
+		display: none;
+	}
+
 }
 
 .bbp-topic-form br,
@@ -544,6 +545,14 @@ address {
 
 .bbp-header li {
 	font-weight: 600;
+}
+
+.bbp-body li {
+	min-height: 3rem;
+}
+
+.type-topic li {
+	min-height: 2rem;
 }
 
 .bbp-author-ip,
@@ -594,7 +603,7 @@ address {
 
 	li {
 		float: left;
-		padding: 20px 2%;
+		padding: 1.4rem 2%;
 		background: $forum_odd_background;
 	}
 
@@ -618,6 +627,7 @@ address {
 
 .bbp-topic-freshness {
 	width: 21%;
+	font-size: 0.9rem;
 }
 
 .bbp-submit-wrapper {
@@ -653,10 +663,14 @@ address {
 
 .type-topic,
 .type-reply {
-	border-bottom: 1px solid #ccc;
 	float: left;
 	width: 100%;
-	padding: 0 0 40px 0;
+	padding: 0;
+
+	body.single-topic & {
+		border-bottom: 1px solid #ccc;		
+	}
+
 }
 
 .bbp-reply-permalink,

@@ -357,6 +357,8 @@ address {
   float: left;
   width: 63%;
   padding: 0 0 60px 0; }
+  #bbpress-forums .bbp-breadcrumb {
+    display: none; }
 
 .bbp-topic-form br,
 .bbp-admin-links a.bbp-topic-super-sticky-link,
@@ -376,6 +378,12 @@ address {
 /* Forums */
 .bbp-header li {
   font-weight: 600; }
+
+.bbp-body li {
+  min-height: 3rem; }
+
+.type-topic li {
+  min-height: 2rem; }
 
 .bbp-author-ip,
 .bbp-header li,
@@ -419,7 +427,7 @@ address {
   .bbp-body li,
   .bbp-footer li {
     float: left;
-    padding: 20px 2%;
+    padding: 1.4rem 2%;
     background: #f9f9f9; }
 
 .bbp-header li {
@@ -432,7 +440,8 @@ address {
   width: 11%; }
 
 .bbp-topic-freshness {
-  width: 21%; }
+  width: 21%;
+  font-size: 0.9rem; }
 
 .bbp-submit-wrapper {
   margin-top: 40px; }
@@ -458,10 +467,12 @@ address {
 
 .type-topic,
 .type-reply {
-  border-bottom: 1px solid #ccc;
   float: left;
   width: 100%;
-  padding: 0 0 40px 0; }
+  padding: 0; }
+  body.single-topic .type-topic, body.single-topic
+  .type-reply {
+    border-bottom: 1px solid #ccc; }
 
 .bbp-reply-permalink,
 .bbp-reply-post-date {
