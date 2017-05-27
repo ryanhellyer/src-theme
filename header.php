@@ -36,18 +36,7 @@
 				)
 			);
 
-			// Custom craft final menu item ourselves
-			echo "\n\t\t\t<li>";
-			if ( is_user_logged_in() ) {
-				echo '
-				<span>Welcome</span>
-				<a href="#">View Profile</a>';
-			} else {
-				echo '
-				<span>Join us</span>
-				<a href="#">Log in</a> or <a href="#">Register</a>';
-			}
-			echo "\n\t\t\t</li>";
+
 
 			?>
 
@@ -65,10 +54,7 @@ if ( is_front_page() ) {
 	</div>
 </section><!-- #featured-news -->
 
-<?php } else { ?>
-
-<div id="header-section">
-</div><!-- #header-section --><?php
+<?php
 }
 ?>
 

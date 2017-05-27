@@ -36,14 +36,6 @@ class SRC_bbPress {
 	 */
 	public function init() {
 
-		register_nav_menus(
-			array(
-				'header'       => __( 'Header Menu' ),
-				'social-links' => __( 'Social Links Menu' ),
-				'footer'       => __( 'Footer Menu' ),
-			)
-		);
-
 		remove_action( 'wp_print_styles', 'bbp_signature_css' );
 
 		add_filter( 'bbp_edit_user_signature_handler', 'wp_kses_post' );
@@ -53,7 +45,6 @@ class SRC_bbPress {
 		remove_filter( 'bbp_edit_user_signature_handler', '_wp_specialchars' );
 
 	}
-
 
 	/**
 	 * Deregister the bbPress stylesheet(s).

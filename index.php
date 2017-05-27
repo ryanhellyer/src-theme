@@ -10,6 +10,8 @@ get_header();
 
 echo '<div id="bbpress-wrapper">';
 
+bbp_breadcrumb();
+
 
 // Load main loop
 if ( have_posts() ) {
@@ -29,8 +31,10 @@ if ( have_posts() ) {
 					// Don't display links on singular post titles
 					if ( is_singular() ) {
 						the_title();
+						edit_post_link( 'edit', ' <small>(', ')</small>' );
 					} else {
 						?><a href="<?php the_permalink(); ?>" title="<?php echo esc_attr( sprintf( __( 'Permalink to %s', 'hellish-simplicity' ), the_title_attribute( 'echo=0' ) ) ); ?>" rel="bookmark"><?php the_title(); ?></a><?php
+						edit_post_link( 'edit', ' <small>(', ')</small>' );
 					}
 
 					?>
@@ -52,26 +56,7 @@ else {
 ?>
 
 
-	<div id="sidebar">
-
-		<h3>Latest posts</h3>
-		<ul>
-			<li><a href="#">Some thread by Luigi</a></li>
-			<li><a href="#">Latest results</a></li>
-			<li><a href="#">My penis is itchy. Will driving faster help me scratch it?</a></li>
-			<li><a href="#">My car is fucked</a></li>
-			<li><a href="#">Pinks cars are faster than other cars</a></li>
-		</ul>
-
-		<h3>Newest users</h3>
-		<ul>
-			<li><a href="#">Elise bla</a></li>
-			<li><a href="#">Paul Rosanski</a></li>
-			<li><a href="#">Tango Foxx</a></li>
-			<li><a href="#">Jacob Reid</a></li>
-		</ul>
-
-	</div><!-- #sidebar -->
+	<div id="sidebar"><?php dynamic_sidebar( 'sidebar' ); ?></div><!-- #sidebar -->
 
 
 </div>

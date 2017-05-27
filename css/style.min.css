@@ -46,13 +46,12 @@ address {
   position: fixed;
   top: 0;
   left: 0;
-  background: #202020;
+  background: pink;
   width: 100%;
-  height: 70px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.9); }
+  height: 100px; }
   #site-header h1 {
     position: absolute;
-    top: 5px;
+    top: 17px;
     left: 30px;
     width: 215px;
     height: 64px;
@@ -69,31 +68,19 @@ address {
   #site-header li {
     float: left;
     font-family: "Open Sans", sans-serif;
-    font-size: 0.9rem;
+    font-size: 1.0rem;
     text-transform: uppercase;
     font-weight: 800; }
     #site-header li:first-child {
       margin-left: 270px; }
     #site-header li:last-child {
       float: right;
-      position: relative;
       background: #cd0203;
-      height: 60px;
+      height: 62px;
       color: #fff;
-      padding: 10px 20px 0 20px;
+      padding: 19px 40px;
       font-size: 0.9rem;
       font-weight: 400; }
-      #site-header li:last-child:before {
-        display: block;
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -20px;
-        width: 20px;
-        height: 70px;
-        background: #cd0203;
-        -webkit-clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%, 0 0);
-        clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%, 0 0); }
       #site-header li:last-child span {
         font-weight: 700;
         display: block;
@@ -101,7 +88,7 @@ address {
         margin-bottom: 7px; }
       #site-header li:last-child a {
         display: inline;
-        font-weight: 700;
+        font-weight: 800;
         height: auto;
         line-height: 1;
         padding: 0;
@@ -109,8 +96,8 @@ address {
     #site-header li a {
       display: block;
       color: #fff;
-      height: 70px;
-      line-height: 70px;
+      height: 100px;
+      line-height: 100px;
       padding: 0 22px;
       text-decoration: none; }
       #site-header li a:hover {
@@ -121,7 +108,6 @@ address {
 #main {
   float: left;
   width: 100%;
-  margin: 100px 0 0 0;
   padding: 0; }
 
 /* =Featured news
@@ -149,17 +135,23 @@ address {
     font-weight: 700;
     border: none; }
 
+/* =Header section
+-------------------------------------------------------------- */
+#header-section {
+  width: 100%;
+  height: 140px; }
+
 /* =Latest news
 -------------------------------------------------------------- */
 #latest-news {
   width: 92%;
-  padding: 0 4%; }
+  padding: 0 4% 60px 4%; }
   #latest-news header h2 {
     margin: 40px 0 20px 0; }
   #latest-news article {
     float: left;
     width: 32%;
-    padding-bottom: 10px;
+    padding-bottom: 60px;
     background: #fff;
     margin: 0 20px;
     position: relative;
@@ -176,11 +168,11 @@ address {
       margin: 20px 0;
       font-family: "Open Sans", sans-serif;
       font-weight: 600;
-      font-size: 0.8rem; }
+      font-size: 0.9rem; }
     #latest-news article p {
       font-family: "Open Sans", sans-serif;
-      font-weight: 400;
-      font-size: 1.1rem; }
+      font-weight: 600;
+      font-size: 1.4rem; }
 
 /* =Schedule
 -------------------------------------------------------------- */
@@ -366,6 +358,7 @@ address {
 .bbp-topic-voice-count,
 #subscription-toggle,
 .bbp-forum-description,
+.bbp-breadcrumb,
 .bbp-template-notice,
 .bbp-topic-description,
 .bbp-pagination-count {
@@ -554,8 +547,8 @@ h6 {
 h1 {
   font-size: 2.2rem;
   font-weight: 600;
-  margin: 40px 0 40px 0;
-  padding: 0 0 20px 0;
+  margin: 80px 0 40px 0;
+  padding: 0 0 60px 0;
   border-bottom: 1px solid #ccc; }
 
 h2 {
@@ -722,4 +715,4 @@ a {
   #results #standings {
     width: 100%; } }
 
-/*# sourceMappingURL=style.css.map */
+/*# sourceMappingURL=style.min.css.map */

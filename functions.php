@@ -43,8 +43,19 @@ Maybe add galleries as forum post-type, but just style differently. Get bad URLs
 
 Make "WP Racing League plugin"
 
-Pick one person from each race to ask questions to automatically. These get turned into posts on the site.
-	Perhaps have 20 possible questions, and ask two people four questions each for each round.
+Gertrudes Smith should be the site administrator
+Once an event is completed (determined by the last race being won), she should automatically send emails out to drivers asking them to answer the questions on a page.
+The page would include a form, asking random questions (perhaps select three from list of 20). Only drivers listed in the results should be contacted. Do an AM driver and PRO.
+At start of season, Gertude would send a link to the "driver of the day" award which needs answered shortly after the race ends.
+	Only drivers who drove in the event can choose driver of the event.
+The day after each event, gallery images for the event, answers to the questions and driver of the event would be turned into a forum post.
+Other things she could mention are:
+	fastest lap of the race
+	most laps led
+	best crash
+	who was on pole, who finished 1st, second, third in each race, and the round finishing order too.
+	admins could have the ability to add random quotes
+	biggest position gain in race
 
 Use this to make cars with white backgrounds: https://www.rfactorcentral.com/detail.cfm?ID=Modern%20Showroom
 
@@ -123,83 +134,8 @@ require( 'inc/class-src-bbpress.php' );
 require( 'inc/class-src-events.php' );
 require( 'inc/class-src-results.php' );
 require( 'inc/class-src-admin.php' );
+require( 'inc/class-src-setup.php' );
 
 new SRC_Events;
 new SRC_Results;
 new SRC_Admin;
-
-/**
- * Primary class used to load the theme.
- *
- * @copyright Copyright (c), Ryan Hellyer
- * @license http://www.gnu.org/licenses/gpl.html GPL
- * @author Ryan Hellyer <ryanhellyer@gmail.com>
- * @package Hellish Simplicity
- * @since Hellish Simplicity 1.5
- */
-class SRC_Theme_Setup {
-
-	/**
-	 * Theme version number.
-	 * 
-	 * @var string
-	 */
-	const VERSION_NUMBER = '1.0';
-
-	/**
-	 * Theme name.
-	 * 
-	 * @var string
-	 */
-	const THEME_NAME = 'src';
-
-	/**
-	 * Constructor.
-	 * Add methods to appropriate hooks and filters.
-	 */
-	public function __construct() {
-
-		// Add action hooks
-		add_action( 'after_setup_theme',  array( $this, 'theme_setup' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'stylesheets' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'script' ) );
-
-	}
-
-	/**
-	 * Load stylesheets.
-	 */
-	public function stylesheets() {
-		if ( ! is_admin() ) {
-			wp_enqueue_style( self::THEME_NAME, get_stylesheet_directory_uri() . '/css/style.css', array(), self::VERSION_NUMBER );
-			wp_enqueue_style( 'google-open-sans', 'https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800', array(), self::VERSION_NUMBER );
-		}
-	}
-
-	/**
-	 * Load script.
-	 */
-	public function script() {
-		if ( ! is_admin() ) {
-			wp_enqueue_script( self::THEME_NAME, get_template_directory_uri() . '/js/script.js', null, SELF::VERSION_NUMBER );
-		}
-	}
-
-	/**
-	 * Sets up theme defaults and registers support for various WordPress features.
-	 */
-	public function theme_setup() {
-
-		// Add default posts and comments RSS feed links to head
-		add_theme_support( 'automatic-feed-links' );
-
-		// Add title tags
-		add_theme_support( 'title-tag' );
-
-		// Enable support for Post Thumbnails
-		add_theme_support( 'post-thumbnails' );
-//		add_image_size( self::THEME_NAME . '-excerpt-thumb', 250, 350 );
-	}
-
-}
-new SRC_Theme_Setup;
