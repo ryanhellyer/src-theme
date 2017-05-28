@@ -53,11 +53,16 @@ else {
 }
 
 
+if (
+	is_bbpress() // only display on forum pages
+	&&
+	! bbp_is_single_user() // But not member profiles
+) {
 ?>
-
 
 	<div id="sidebar"><?php dynamic_sidebar( 'sidebar' ); ?></div><!-- #sidebar -->
 
+<?php } ?>
 
 </div>
 

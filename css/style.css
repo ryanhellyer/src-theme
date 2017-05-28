@@ -88,12 +88,18 @@ address {
     float: right;
     position: relative;
     background: #cd0203;
-    height: 60px;
+    height: 55px;
     color: #fff;
-    padding: 10px 20px 0 20px;
-    font-size: 0.9rem;
+    padding: 15px 20px 0 10px;
+    font-size: 0.8rem;
+    line-height: 1.1rem;
     font-weight: 400;
     text-transform: uppercase; }
+    #site-header .sign-up:hover {
+      background: #de1314;
+      text-decoration: none; }
+      #site-header .sign-up:hover:before {
+        background: #de1314; }
     #site-header .sign-up:before {
       display: block;
       content: "";
@@ -108,8 +114,8 @@ address {
     #site-header .sign-up span {
       font-weight: 700;
       display: block;
-      font-size: 1.5rem;
-      margin-bottom: 7px; }
+      font-size: 1.3rem;
+      margin-bottom: 0px; }
     #site-header .sign-up a {
       display: inline;
       font-weight: 700;
@@ -349,7 +355,7 @@ address {
 /* =bbPress layout
 -------------------------------------------------------------- */
 #bbpress-wrapper {
-  width: 100%;
+  width: 92%;
   max-width: 1280px;
   margin: 0 auto; }
 
@@ -445,6 +451,9 @@ address {
 
 .bbp-submit-wrapper {
   margin-top: 40px; }
+
+.bbp-topic-form p {
+  margin: 1px 0; }
 
 /* Posts */
 .bbp-pagination-links {
@@ -715,27 +724,39 @@ a {
 -------------------------------------------------------------- */
 @media only screen and (max-width: 1024px) {
   #site-header {
-    text-align: center; }
+    text-align: center;
+    height: 53px; }
     #site-header ul {
-      display: none;
       position: absolute;
-      left: 10px;
-      top: 60px;
+      left: 0px;
+      top: 53px;
       background: #202020;
       width: 300px; }
     #site-header li {
       display: block;
       width: 300px;
-      text-align: left; }
+      text-align: left;
+      border-top: 1px solid #333;
+      border-bottom: 1px solid #111; }
       #site-header li:first-child {
         margin-left: 0; }
     #site-header h1 {
       float: none;
-      display: inline-block; }
+      display: inline-block;
+      margin: 8px 0 0 30px;
+      width: 134px;
+      height: 40px;
+      background-size: 100%; }
     #site-header nav {
       float: left;
       position: relative; }
+      #site-header nav ul {
+        transition: 0.3s;
+        left: -300px;
+        height: calc(100vh - 50px);
+        /* Make menu display to the bottom of the screen */ }
       #site-header nav.open ul {
+        left: 0;
         display: block; }
       #site-header nav:before {
         position: absolute;
@@ -752,6 +773,23 @@ a {
         cursor: pointer; }
       #site-header nav.open:before {
         content: "\e904"; }
+    #site-header .sign-up {
+      height: 49px;
+      color: #fff;
+      padding: 4px 20px 0 10px;
+      font-size: 0.8rem;
+      line-height: 1.2rem; }
+      #site-header .sign-up:before {
+        height: 53px; }
+
+  #bbpress-forums {
+    width: 100%; }
+
+  #sidebar {
+    display: none; }
+
+  #main {
+    margin: 60px 0 0 0; }
 
   #schedule {
     width: 100%;
