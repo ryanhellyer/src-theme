@@ -25,10 +25,20 @@ body,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,a,img,dl,dt,dd,ol,ul,li,fieldset,form
 
 body.home {
 	background: $light_background_colour;
+
+	#main {
+		margin-top: 0;
+	}
+
 }
 
 body {
 	background: #fff;
+}
+
+body,
+html {
+	height: 100%;
 }
 
 b,
@@ -130,57 +140,63 @@ address {
 
 	}
 
-	.sign-up {
-		float: right;
-		position: relative;
-		background: $red;
-		height: 55px;
+}
+
+/* =Sign up
+-------------------------------------------------------------- */
+
+.sign-up {
+	float: right;
+	font-family: $button_font;
+	position: relative;
+	background: $red;
+	height: 55px;
+	color: #fff;
+	padding: 15px 20px 0 10px;
+	font-size: 0.8rem;
+	line-height: 1.1rem;
+	font-weight: 400;
+	text-transform: uppercase;
+
+	&:hover {
+		background: $hover_red;
 		color: #fff;
-		padding: 15px 20px 0 10px;
-		font-size: 0.8rem;
-		line-height: 1.1rem;
-		font-weight: 400;
-		text-transform: uppercase;
-
-		&:hover {
-			background: $hover_red;
-			text-decoration: none;
-
-			&:before {
-				background: $hover_red;
-			}
-
-		}
+		text-decoration: none;
 
 		&:before {
-			display: block;
-			content: "";
-			position: absolute;
-			top: 0;
-			left: -20px;
-			width: 20px;
-			height: $header_height;
-			background: $red;
-			-webkit-clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%, 0 0);
-			clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%, 0 0);
+			background: $hover_red;
 		}
 
-		span {
-			font-weight: 700;
-			display: block;
-			font-size: 1.3rem;
-			margin-bottom: 0px;
-		}
+	}
 
-		a {
-			display: inline;
-			font-weight: 700;
-			height: auto;
-			line-height: 1;
-			padding: 0;
-			margin: 0;
-		}
+	&:before {
+		display: block;
+		content: "";
+		position: absolute;
+		top: 0;
+		left: -20px;
+		width: 20px;
+		height: $header_height;
+		background: $red;
+		-webkit-clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%, 0 0);
+		clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%, 0 0);
+	}
 
+	span {
+		color: #fff;
+		font-weight: 700;
+		display: block;
+		font-size: 1.3rem;
+		margin-bottom: 0px;
+	}
+
+	a {
+		display: inline;
+		font-weight: 700;
+		height: auto;
+		line-height: 1;
+		padding: 0;
+		margin: 0;
 	}
 
 }
@@ -193,6 +209,31 @@ address {
 	width: 100%;
 	margin: 100px 0 0 0;
 	padding: 0;
+	min-height: calc(100vh - 177px);
+
+	ul li {
+		list-style: disc;
+		margin-left: 30px;
+		padding-left: 10px;
+	}
+
+	ol li {
+		list-style: decimal;
+		margin-left: 30px;
+		padding-left: 10px;
+	}
+
+	#bbpress-forums {
+
+		ol li,
+		ul li {
+			list-style: none;
+			margin-left: 0;
+			padding-left: 0;
+		}
+
+	}
+
 }
 
 /* =Featured news
@@ -202,7 +243,7 @@ address {
 	position: relative;
 	width: 100%;
 	height: 550px;
-	background-position: center;
+	background-position: center 0;
 	background-size: cover;
 	text-align: center;
 
@@ -232,13 +273,13 @@ address {
 
 #latest-news {
 	width: $wrap_width;
-	padding: 0 $wrap_padding;
+	padding: 0 $wrap_padding 40px $wrap_padding;
 
 	header h2 {
 		margin: 40px 0 20px 0;
 	}
 
-	article {
+	a.slide {
 		float: left;
 		width: 32%;
 		padding-bottom: 10px;
@@ -247,9 +288,24 @@ address {
 		position: relative;
 		left: -20px;
 
-		img {
-			display: block;
+		&:hover {
+			text-decoration: none;
+
+			.image {
+				opacity: 0.7;
+			}
+
+		}
+
+		.image {
+			background-size: cover;
+			background-position: center;
 			width: 100%;
+			height: 200px;
+		}
+
+		.box-text {
+			background: #fff;
 		}
 
 		date,
@@ -257,6 +313,7 @@ address {
 			display: block;
 			padding-right: 30px;
 			padding-left: 30px;
+			color: #000;
 		}
 
 		date {
@@ -273,6 +330,30 @@ address {
 		}
 
 	}
+}
+
+/* =Simple Registration plugin
+-------------------------------------------------------------- */
+.error {
+	padding: 5px 20px;
+	background: #ffcccc;
+	border: 1px solid #ff9999;
+}
+
+input[type=submit].simple-registration-no {
+	background: none;
+	border: none;
+	font-weight: 600;
+	text-transform: none;
+	color: #000;
+	display: block;
+	padding: 0;
+
+	&:hover {
+		background: none;
+		text-decoration: underline;
+	}
+
 }
 
 /* =Schedule
@@ -355,6 +436,49 @@ address {
 	}
 
 }
+
+/* =Tables
+-------------------------------------------------------------- */
+
+table {
+//	width: 100%;
+	border-spacing: 0;
+	border-collapse: collapse;
+}
+
+td,
+th {
+	text-align: left;
+	font-family: $paragraph_font;
+	font-size: 0.9rem;
+	padding: 0.8rem 1rem;
+}
+
+th {
+	font-weight: 300;
+	text-transform: uppercase;
+	color: #666;
+	font-size: 0.8rem;
+}
+
+tr {
+	
+}
+
+td {
+	margin: 0;
+	font-weight: 600;
+}
+
+tr:nth-child(2n+1) {
+	td {
+		background: #f4f4f4;
+	}
+}
+td {
+	
+}
+
 
 /* =Results
 -------------------------------------------------------------- */
@@ -530,7 +654,7 @@ address {
 #bbpress-forums {
 	float: left;
 	width: 63%;
-	padding: 0 0 60px 0;
+	padding: 0 0 0 0;
 
 	.bbp-breadcrumb {
 		display: none;
@@ -602,30 +726,33 @@ address {
 .forum-titles {
 	float: left;
 	width: 100%;
-	background: $light_background_colour;
 }
 
-.bbp-header,
-.bbp-body,
-.bbp-footer {
-	width: 100%;
+#main #bbpress-forums {
 
-	.odd li {
-		background: #fff;
+	.bbp-header,
+	.bbp-body,
+	.bbp-footer {
+		width: 100%;
+
+		.odd li {
+			background: #fff;
+		}
+
+		ul li {
+			float: left;
+			padding: 1.4rem 2%;
+			background: $forum_odd_background;
+		}
+
 	}
 
-	li {
-		float: left;
-		padding: 1.4rem 2%;
-		background: $forum_odd_background;
-	}
+	.bbp-header {
 
-}
+		ul li {
+			padding: 10px 2%;
+		}
 
-.bbp-header {
-
-	li {
-		padding: 10px 2%;
 	}
 
 }
@@ -810,8 +937,21 @@ h1 {
 }
 
 h2 {
-	font-size: 1.6rem;
+	font-size: 2rem;
+	margin: 4rem 0 1rem 0;
 }
+
+h3 {
+	font-size: 1.6rem;
+	margin: 4rem 0 0.8rem 0;
+}
+
+h4 {
+	font-size: 1.2rem;
+	margin: 3rem 0 0.7rem 0;
+	text-decoration: underline;
+}
+
 
 textarea,
 label,
@@ -853,8 +993,10 @@ input#bbp_topic_subscription {
 }
 
 select {
-	display: inline-block;
-	font-size: 1rem;
+	display: block;
+	font-size: 1.2rem;
+	margin-top: 5px;
+	padding: 10px 20px;
 }
 
 img {
@@ -876,6 +1018,7 @@ a {
 
 /* =Buttons
 -------------------------------------------------------------- */
+input[type=submit],
 .button {
 	display: inline-block;
 	background: $red;
@@ -887,10 +1030,10 @@ a {
 	font-weight: 800;
 	border: none;
 	outline: none;
-
 	text-decoration: none;
 
 	&:hover {
+		cursor: pointer;
 		background: $hover_red;
 	}
 
@@ -924,25 +1067,31 @@ a {
 	width: 100%;
 }
 
+.slide {
+	display: block;
+}
+
 
 /* =Site footer
 -------------------------------------------------------------- */
 #site-footer {
 	float: left;
 	width: $wrap_width;
-	padding: 40px $wrap_padding;
+	padding: 0 $wrap_padding;
 	background: $dark_background_colour;
+	margin-top: 60px;
 
 	p {
 		float: left;
 		color: #777;
 		font-family: $paragraph_font;
-		font-size: 0.9rem;
+		font-size: 0.8rem;
+		margin: 20px 0;
 	}
 
 	ul {
 		float: left;
-		margin-left: 40px;
+		margin: 25px 0 20px 40px;
 
 		&#footer-menu {
 			float: right;
@@ -958,8 +1107,8 @@ a {
 	li {
 		float: left;
 		font-family: $paragraph_font;
-		font-size: 0.9rem;
-		font-weight: 700;
+		font-size: 0.8rem;
+		font-weight: 400;
 		margin-right: 20px;
 	}
 
@@ -1011,6 +1160,21 @@ a {
 		&:hover {
 			text-decoration: underline;
 			color: #aaa;
+		}
+
+	}
+
+	.button {
+		float: right;
+		color: #fff;
+		margin: 18px 0 0 40px;
+		padding: 10px 20px;
+		font-size: 1rem;
+
+		&:hover {
+			text-decoration: none;
+			background: $hover_red;
+			color: #fff;
 		}
 
 	}
@@ -1169,5 +1333,56 @@ a {
 		}
 
 	}
+
+	/* Forum */
+	.bbp-meta,
+	.bbp-reply-author,
+	.bbp-reply-content {
+		float: none;
+		width: 100%;
+		text-align: left;
+
+		br {
+			display: none;
+		}
+
+	}
+
+	.bbp-reply-header {
+		margin-top: 20px;
+	}
+
+	.bbp-reply-author img,
+	.bbp-reply-signature {
+		display: none;
+	}
+
+	.bbp-admin-links {
+		float: right;
+	}
+
+	#bbpress-wrapper h1 {
+		margin-bottom: 0;
+	}
+
+	/* Site footer */
+	#site-footer {
+		margin-top: 64px;
+		padding-bottom: 20px;
+
+		p br,
+		.button {
+			display: none;
+		}
+
+		ul {
+			margin: 0;
+		}
+		li {
+			margin-right: 0;
+		}
+
+	}
+
 
 }

@@ -21,6 +21,10 @@ class SRC_bbPress {
 		add_action( 'wp_print_styles', array( $this, 'deregister_bbpress_styles' ), 15 );
 		add_action( 'init', array( $this, 'init' ) );
 
+		// Add support for bbPress post thumbnails
+		add_theme_support( 'post-thumbnails', array( 'topic' ) );
+		add_post_type_support( 'topic', 'thumbnail' );
+
 		// Add filters
 		add_filter( 'bbp_get_topic_admin_links', array( $this, 'change_admin_links' ) );
 		add_filter( 'bbp_get_reply_admin_links', array( $this, 'change_admin_links' ) );
@@ -28,6 +32,7 @@ class SRC_bbPress {
 		add_filter('bbp_get_topic_author_avatar', array( $this, 'change_avatar_size' ), 20, 3);
 		add_filter('bbp_get_reply_author_avatar', array( $this, 'change_avatar_size' ), 20, 3);
 		add_filter('bbp_get_current_user_avatar', array( $this, 'change_avatar_size' ), 20, 3);
+		add_filter('user_contactmethods',         array( $this, 'add_social_links' ) );
 
 	}
 
@@ -90,5 +95,33 @@ class SRC_bbPress {
 		return $author_avatar;
 	}
 
+	/**
+	 * Add social links to bbPress.
+	 *
+	 * @array  $links  The social links
+	 * @return array  The modified social links
+	 */
+	function add_social_links( $links ) {
+
+		// Add new ones
+		$links['twitter'] = 'Twitter';
+		$links['facebook'] = 'Facebook';
+		$links['youtube'] = 'Youtube';
+		$links['steam'] = 'Steam';
+
+		// remove unwanted
+		unset( $links['aim'] );
+		unset( $links['jabber'] );
+		unset( $links['yim'] );
+
+		return $links;
+	}
+
 }
 new SRC_bbPress;
+
+
+add_action( 'edit_user_profile',    'boob'     );
+function boob() {
+	echo 'xxxxxxxxxxxx';
+}

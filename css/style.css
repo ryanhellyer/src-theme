@@ -9,9 +9,15 @@ body, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, a, img, dl, dt, dd, ol, ul,
 
 body.home {
   background: #ebebeb; }
+  body.home #main {
+    margin-top: 0; }
 
 body {
   background: #fff; }
+
+body,
+html {
+  height: 100%; }
 
 b,
 strong {
@@ -84,45 +90,51 @@ address {
       text-decoration: none; }
       #site-header li a:hover {
         background: #222; }
-  #site-header .sign-up {
-    float: right;
-    position: relative;
-    background: #cd0203;
-    height: 55px;
+
+/* =Sign up
+-------------------------------------------------------------- */
+.sign-up {
+  float: right;
+  font-family: "Open Sans", sans-serif;
+  position: relative;
+  background: #cd0203;
+  height: 55px;
+  color: #fff;
+  padding: 15px 20px 0 10px;
+  font-size: 0.8rem;
+  line-height: 1.1rem;
+  font-weight: 400;
+  text-transform: uppercase; }
+  .sign-up:hover {
+    background: #de1314;
     color: #fff;
-    padding: 15px 20px 0 10px;
-    font-size: 0.8rem;
-    line-height: 1.1rem;
-    font-weight: 400;
-    text-transform: uppercase; }
-    #site-header .sign-up:hover {
-      background: #de1314;
-      text-decoration: none; }
-      #site-header .sign-up:hover:before {
-        background: #de1314; }
-    #site-header .sign-up:before {
-      display: block;
-      content: "";
-      position: absolute;
-      top: 0;
-      left: -20px;
-      width: 20px;
-      height: 70px;
-      background: #cd0203;
-      -webkit-clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%, 0 0);
-      clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%, 0 0); }
-    #site-header .sign-up span {
-      font-weight: 700;
-      display: block;
-      font-size: 1.3rem;
-      margin-bottom: 0px; }
-    #site-header .sign-up a {
-      display: inline;
-      font-weight: 700;
-      height: auto;
-      line-height: 1;
-      padding: 0;
-      margin: 0; }
+    text-decoration: none; }
+    .sign-up:hover:before {
+      background: #de1314; }
+  .sign-up:before {
+    display: block;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -20px;
+    width: 20px;
+    height: 70px;
+    background: #cd0203;
+    -webkit-clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%, 0 0);
+    clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%, 0 0); }
+  .sign-up span {
+    color: #fff;
+    font-weight: 700;
+    display: block;
+    font-size: 1.3rem;
+    margin-bottom: 0px; }
+  .sign-up a {
+    display: inline;
+    font-weight: 700;
+    height: auto;
+    line-height: 1;
+    padding: 0;
+    margin: 0; }
 
 /* =Main content
 -------------------------------------------------------------- */
@@ -130,7 +142,21 @@ address {
   float: left;
   width: 100%;
   margin: 100px 0 0 0;
-  padding: 0; }
+  padding: 0;
+  min-height: calc(100vh - 177px); }
+  #main ul li {
+    list-style: disc;
+    margin-left: 30px;
+    padding-left: 10px; }
+  #main ol li {
+    list-style: decimal;
+    margin-left: 30px;
+    padding-left: 10px; }
+  #main #bbpress-forums ol li,
+  #main #bbpress-forums ul li {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0; }
 
 /* =Featured news
 -------------------------------------------------------------- */
@@ -138,7 +164,7 @@ address {
   position: relative;
   width: 100%;
   height: 550px;
-  background-position: center;
+  background-position: center 0;
   background-size: cover;
   text-align: center; }
   #featured-news .text {
@@ -161,10 +187,10 @@ address {
 -------------------------------------------------------------- */
 #latest-news {
   width: 92%;
-  padding: 0 4%; }
+  padding: 0 4% 40px 4%; }
   #latest-news header h2 {
     margin: 40px 0 20px 0; }
-  #latest-news article {
+  #latest-news a.slide {
     float: left;
     width: 32%;
     padding-bottom: 10px;
@@ -172,23 +198,51 @@ address {
     margin: 0 20px;
     position: relative;
     left: -20px; }
-    #latest-news article img {
-      display: block;
-      width: 100%; }
-    #latest-news article date,
-    #latest-news article p {
+    #latest-news a.slide:hover {
+      text-decoration: none; }
+      #latest-news a.slide:hover .image {
+        opacity: 0.7; }
+    #latest-news a.slide .image {
+      background-size: cover;
+      background-position: center;
+      width: 100%;
+      height: 200px; }
+    #latest-news a.slide .box-text {
+      background: #fff; }
+    #latest-news a.slide date,
+    #latest-news a.slide p {
       display: block;
       padding-right: 30px;
-      padding-left: 30px; }
-    #latest-news article date {
+      padding-left: 30px;
+      color: #000; }
+    #latest-news a.slide date {
       margin: 20px 0;
       font-family: "Open Sans", sans-serif;
       font-weight: 600;
       font-size: 0.8rem; }
-    #latest-news article p {
+    #latest-news a.slide p {
       font-family: "Open Sans", sans-serif;
       font-weight: 400;
       font-size: 1.1rem; }
+
+/* =Simple Registration plugin
+-------------------------------------------------------------- */
+.error {
+  padding: 5px 20px;
+  background: #ffcccc;
+  border: 1px solid #ff9999; }
+
+input[type=submit].simple-registration-no {
+  background: none;
+  border: none;
+  font-weight: 600;
+  text-transform: none;
+  color: #000;
+  display: block;
+  padding: 0; }
+  input[type=submit].simple-registration-no:hover {
+    background: none;
+    text-decoration: underline; }
 
 /* =Schedule
 -------------------------------------------------------------- */
@@ -240,6 +294,32 @@ address {
         margin-top: 60px;
         font-weight: 400;
         font-size: 2rem; }
+
+/* =Tables
+-------------------------------------------------------------- */
+table {
+  border-spacing: 0;
+  border-collapse: collapse; }
+
+td,
+th {
+  text-align: left;
+  font-family: "Open Sans", sans-serif;
+  font-size: 0.9rem;
+  padding: 0.8rem 1rem; }
+
+th {
+  font-weight: 300;
+  text-transform: uppercase;
+  color: #666;
+  font-size: 0.8rem; }
+
+td {
+  margin: 0;
+  font-weight: 600; }
+
+tr:nth-child(2n+1) td {
+  background: #f4f4f4; }
 
 /* =Results
 -------------------------------------------------------------- */
@@ -362,7 +442,7 @@ address {
 #bbpress-forums {
   float: left;
   width: 63%;
-  padding: 0 0 60px 0; }
+  padding: 0 0 0 0; }
   #bbpress-forums .bbp-breadcrumb {
     display: none; }
 
@@ -418,25 +498,23 @@ address {
 /* Topics */
 .forum-titles {
   float: left;
-  width: 100%;
-  background: #ebebeb; }
-
-.bbp-header,
-.bbp-body,
-.bbp-footer {
   width: 100%; }
-  .bbp-header .odd li,
-  .bbp-body .odd li,
-  .bbp-footer .odd li {
+
+#main #bbpress-forums .bbp-header,
+#main #bbpress-forums .bbp-body,
+#main #bbpress-forums .bbp-footer {
+  width: 100%; }
+  #main #bbpress-forums .bbp-header .odd li,
+  #main #bbpress-forums .bbp-body .odd li,
+  #main #bbpress-forums .bbp-footer .odd li {
     background: #fff; }
-  .bbp-header li,
-  .bbp-body li,
-  .bbp-footer li {
+  #main #bbpress-forums .bbp-header ul li,
+  #main #bbpress-forums .bbp-body ul li,
+  #main #bbpress-forums .bbp-footer ul li {
     float: left;
     padding: 1.4rem 2%;
     background: #f9f9f9; }
-
-.bbp-header li {
+#main #bbpress-forums .bbp-header ul li {
   padding: 10px 2%; }
 
 .bbp-topic-title {
@@ -581,7 +659,17 @@ h1 {
   border-bottom: 1px solid #ccc; }
 
 h2 {
-  font-size: 1.6rem; }
+  font-size: 2rem;
+  margin: 4rem 0 1rem 0; }
+
+h3 {
+  font-size: 1.6rem;
+  margin: 4rem 0 0.8rem 0; }
+
+h4 {
+  font-size: 1.2rem;
+  margin: 3rem 0 0.7rem 0;
+  text-decoration: underline; }
 
 textarea,
 label,
@@ -616,8 +704,10 @@ input#bbp_topic_subscription {
   display: inline-block; }
 
 select {
-  display: inline-block;
-  font-size: 1rem; }
+  display: block;
+  font-size: 1.2rem;
+  margin-top: 5px;
+  padding: 10px 20px; }
 
 img {
   max-width: 100%; }
@@ -632,6 +722,7 @@ a {
 
 /* =Buttons
 -------------------------------------------------------------- */
+input[type=submit],
 .button {
   display: inline-block;
   background: #cd0203;
@@ -644,7 +735,9 @@ a {
   border: none;
   outline: none;
   text-decoration: none; }
+  input[type=submit]:hover,
   .button:hover {
+    cursor: pointer;
     background: #de1314; }
 
 .highlighted-link {
@@ -668,21 +761,26 @@ a {
 .slider-inner {
   width: 100%; }
 
+.slide {
+  display: block; }
+
 /* =Site footer
 -------------------------------------------------------------- */
 #site-footer {
   float: left;
   width: 92%;
-  padding: 40px 4%;
-  background: #202020; }
+  padding: 0 4%;
+  background: #202020;
+  margin-top: 60px; }
   #site-footer p {
     float: left;
     color: #777;
     font-family: "Open Sans", sans-serif;
-    font-size: 0.9rem; }
+    font-size: 0.8rem;
+    margin: 20px 0; }
   #site-footer ul {
     float: left;
-    margin-left: 40px; }
+    margin: 25px 0 20px 40px; }
     #site-footer ul#footer-menu {
       float: right; }
       #site-footer ul#footer-menu li {
@@ -690,8 +788,8 @@ a {
   #site-footer li {
     float: left;
     font-family: "Open Sans", sans-serif;
-    font-size: 0.9rem;
-    font-weight: 700;
+    font-size: 0.8rem;
+    font-weight: 400;
     margin-right: 20px; }
   #site-footer a {
     color: #777;
@@ -719,6 +817,16 @@ a {
     #site-footer a:hover {
       text-decoration: underline;
       color: #aaa; }
+  #site-footer .button {
+    float: right;
+    color: #fff;
+    margin: 18px 0 0 40px;
+    padding: 10px 20px;
+    font-size: 1rem; }
+    #site-footer .button:hover {
+      text-decoration: none;
+      background: #de1314;
+      color: #fff; }
 
 /* =Smaller devices
 -------------------------------------------------------------- */
@@ -805,6 +913,43 @@ a {
   #results .other-race {
     display: none; }
   #results #standings {
-    width: 100%; } }
+    width: 100%; }
+
+  /* Forum */
+  .bbp-meta,
+  .bbp-reply-author,
+  .bbp-reply-content {
+    float: none;
+    width: 100%;
+    text-align: left; }
+    .bbp-meta br,
+    .bbp-reply-author br,
+    .bbp-reply-content br {
+      display: none; }
+
+  .bbp-reply-header {
+    margin-top: 20px; }
+
+  .bbp-reply-author img,
+  .bbp-reply-signature {
+    display: none; }
+
+  .bbp-admin-links {
+    float: right; }
+
+  #bbpress-wrapper h1 {
+    margin-bottom: 0; }
+
+  /* Site footer */
+  #site-footer {
+    margin-top: 64px;
+    padding-bottom: 20px; }
+    #site-footer p br,
+    #site-footer .button {
+      display: none; }
+    #site-footer ul {
+      margin: 0; }
+    #site-footer li {
+      margin-right: 0; } }
 
 /*# sourceMappingURL=style.css.map */
