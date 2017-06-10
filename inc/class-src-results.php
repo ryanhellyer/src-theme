@@ -17,244 +17,232 @@ class SRC_Results extends SRC_Core {
 	 * Add methods to appropriate hooks and filters.
 	 */
 	public function __construct() {
-		add_shortcode( 'src-results', array( $this, 'results_shortcode' ) );
+		add_shortcode( 'src-driver-standings', array( $this, 'driver_standings' ) );
+		add_shortcode( 'src-amdriver-standings', array( $this, 'amdriver_standings' ) );
+		add_shortcode( 'src-team-standings',   array( $this, 'team_standings' ) );
 	}
 
 	/**
-	 * Results.
+	 * Driver standings.
 	 */
-	public function results_shortcode( $args ) {
+	public function driver_standings( $args ) {
 
-		// Convert $only into usable format
-		$only = null;
-		if ( isset( $args['only'] ) ) {
-			$only = array();
-
-			$only_exploded = explode( ';', $args['only'] );
-			foreach ( $only_exploded as $x => $o ) {
-				$o = explode( '=', $o );
-				$only[ $o[0] ] = $o[1];
-			}
-
-		}
-
-		// Get order into array
-		$order = null;
-		if ( isset( $args['order'] ) ) {
-			$order = explode( ',', $args['order'] );
-		}
-
-		// Set orderby
-		if ( isset( $args['orderby'] ) ) {
-			$orderby = $args['orderby'];
-		} else {
-			$orderby = 'Pts';
-		}
-
-		// Get season
+		// Set Season
 		if ( isset( $args['season'] ) ) {
 			$season = $args['season'];
-
-			$results = $this->get_results(
-				$season,
-				$orderby,
-				true,
-				$order,
-				$only
-			);
-
 		} else {
-			return 'No season specified';
+			return 'No season set';
 		}
 
+		$order = array(
+			'Username',
+			'Nationality',
+			'Car',
+			'Team',
+			'Class',
+			'Pts',
+		);
 
-		$content = '
-				<table>';
+		$drivers = src_get_drivers( $season );
 
-		foreach( $results as $row_number => $row ) {
+		$content = '';
+		if ( is_array( $drivers ) ) {
+			$content .= '<table>';
 
-			if ( 0 === $row_number ) {
+			$content .= '<thead><tr>';
+			$content .= '<th>' . esc_html__( 'Pos', 'src' ) . '</th>';
+			$content .= '<th>' . esc_html__( 'Name', 'src' ) . '</th>';
+			$content .= '<th>' . esc_html__( 'Num', 'src' ) . '</th>';
+			$content .= '<th>' . esc_html__( 'Nationality', 'src' ) . '</th>';
+			$content .= '<th>' . esc_html__( 'Car', 'src' ) . '</th>';
+			$content .= '<th>' . esc_html__( 'Team', 'src' ) . '</th>';
+			$content .= '<th>' . esc_html__( 'Class', 'src' ) . '</th>';
+			$content .= '<th>' . esc_html__( 'Pts', 'src' ) . '</th>';
+			$content .= '</tr></thead>';
 
-				$content .= '
-					 <thead>
-						<tr>
-							<th>' . esc_html__( 'Pos', 'src' ) . '</th>';
+			$count = 0;
+			foreach ( $drivers as $row_number => $driver ) {
+				$count++;
+				$content .= '<tr>';
 
-				foreach( $row as $column => $label ) {
+				$content .= '<td>' . esc_html( $count ) . '</td>';
 
-					// Bail out if on number, as this is a race and not needed for driver listings
-					if ( is_numeric( $column ) ) {
-						continue;
+				foreach( $order as $column ) {
+
+					foreach ( $this->driver_data_order() as $key => $col ) {
+
+						if ( $column === $col ) {
+
+							$content .= '<td>';
+							if ( 'Username' == $col ) {
+								$username = $driver[$key];
+								$name = src_get_display_name_from_username( $username );
+								$url = src_get_memberurl_from_username( $username );
+
+								if ( false !== $url ) {
+									$content .= '<a href="' . esc_url( $url ) . '">' . esc_html( $name ) . '</a>';
+								} else {
+									$content .= $name;
+								}
+
+							} else {
+								$content .= esc_html( $driver[$key] );
+							}
+							$content .= '</td>';
+
+						}
+
 					}
-
-					if ( 'Username' === $column ) {
-						$column = 'Name';
-					}
-
-					$content .= '<th>' . esc_html( $column ) . '</th>';
 				}
 
-				$content .= '
-						</tr>
-					</thead>';
+				$content .= '<td>' . esc_html( src_get_driver_points( $season, $username ) ) . '</td>';
+
+				$content .= '</tr>';
 			}
+			$content .= '</table>';
+		}
 
-			$content .= '
-						<tr>
-							<td>' . esc_html( $row_number + 1 ) . '</td>';
+		return $content;
 
-			foreach( $row as $column => $label ) {
+	}
 
-				// Bail out if on number, as this is a race and not needed for driver listings
-				if ( is_numeric( $column ) ) {
+	/**
+	 * AM Driver standings.
+	 */
+	public function amdriver_standings( $args ) {
+
+		// Set Season
+		if ( isset( $args['season'] ) ) {
+			$season = $args['season'];
+		} else {
+			return 'No season set';
+		}
+
+		$order = array(
+			'Username',
+			'Nationality',
+			'Car',
+			'Team',
+			'Class',
+			'Pts',
+		);
+
+		$drivers = src_get_drivers( $season, true );
+
+		$content = '';
+		if ( is_array( $drivers ) ) {
+			$content .= '<table>';
+
+			$content .= '<thead><tr>';
+			$content .= '<th>' . esc_html__( 'Pos', 'src' ) . '</th>';
+			$content .= '<th>' . esc_html__( 'Name', 'src' ) . '</th>';
+			$content .= '<th>' . esc_html__( 'Num', 'src' ) . '</th>';
+			$content .= '<th>' . esc_html__( 'Nationality', 'src' ) . '</th>';
+			$content .= '<th>' . esc_html__( 'Car', 'src' ) . '</th>';
+			$content .= '<th>' . esc_html__( 'Team', 'src' ) . '</th>';
+			$content .= '<th>' . esc_html__( 'Class', 'src' ) . '</th>';
+			$content .= '<th>' . esc_html__( 'Pts', 'src' ) . '</th>';
+			$content .= '</tr></thead>';
+
+			$count = 0;
+			foreach ( $drivers as $row_number => $driver ) {
+
+				// Ignore PRO drivers
+				if ( 'PRO' === $driver[5] ) {
 					continue;
 				}
 
-				// We ignore two decimal place numbers, as we may need to designate fractions for when dead heats cause problems
-				if ( is_numeric ( $label ) ) {
-					$label = round( $label, 1 );
-				}
+				$count++;
+				$content .= '<tr>';
 
-				$label = esc_html( $label ); // Early escaped so that link can be added when required
+				$content .= '<td>' . esc_html( $count ) . '</td>';
 
-				// Add link if possible
-				if ( 'Username' === $column ) {
-					$user = get_user_by( 'login', $label );
-					if ( isset( $user->data->display_name ) ) {
-						$name = $user->data->display_name;
-						$user_id = $user->data->ID;
-						$url = bbp_get_user_profile_url( $user_id );
-						$label = '<a href="' . esc_url( $url ) . '">' . esc_html( $name ) . '</a>';
+				foreach( $order as $column ) {
+
+					foreach ( $this->driver_data_order() as $key => $col ) {
+
+						if ( $column === $col ) {
+
+							$content .= '<td>';
+							if ( 'Username' == $col ) {
+								$username = $driver[$key];
+								$name = src_get_display_name_from_username( $username );
+								$url = src_get_memberurl_from_username( $username );
+
+								if ( false !== $url ) {
+									$content .= '<a href="' . esc_url( $url ) . '">' . esc_html( $name ) . '</a>';
+								} else {
+									$content .= $name;
+								}
+
+							} else {
+								$content .= esc_html( $driver[$key] );
+							}
+							$content .= '</td>';
+
+						}
+
 					}
 				}
 
-				$content .= '<td>' . $label . '</td>'; // Needed to be escaped earlier
-			}
-			$content .= '</tr>';
+				$content .= '<td>' . esc_html( src_get_driver_ampoints( $season, $username ) ) . '</td>';
 
+				$content .= '</tr>';
+			}
+			$content .= '</table>';
 		}
 
-		$content .= '
-			</table>';
-
 		return $content;
+
 	}
 
 	/**
-	 * Get the results.
-	 * This is a rather convoluted one function for all tasks blob. This could be abstracted, but I felt 
-	 * it was less messy to keep all the logic in one place since it won't be needed elsewhere anyway.
-	 *
-	 * @param  string  $season    The season of the data being accessed
-	 * @param  string  $orderby   The columns to sort by
-	 * @param  bool    $reverse   true if results should be reversed
-	 * @param  array   $order     Order of values. If not set, provides defaults.
+	 * Team standings.
 	 */
-	private function get_results( $season, $orderby = null, $reverse, $order = null, $only = null ) {
+	public function team_standings( $args ) {
 
-		$raw_results = file_get_contents( dirname( __FILE__ ) . '/' . $season . '.csv' );
-		$raw_results = explode( "\n", $raw_results );
-
-		// Iterate through each result
-		$results = array();
-		foreach ( $raw_results as $key => $raw_result ) {
-			$raw_result = explode( ',', $raw_result );
-
-			// First row only used to get keys for columns
-			if ( 0 === $key ) {
-				$columns = $raw_result;
-			} else {
-
-				// Process each row
-				$result = array();
-				$remove = false;
-				$points = $am_points = 0;
-				foreach ( $raw_result as $col_number => $data ) {
-					foreach ( $columns as $n => $label ) {
-						if ( $n === $col_number ) {
-
-							$label = trim( $label );
-							$data = trim( $data );
-							$result[$label] = $data;
-
-							// If label is numeric, then we know it's a race result
-							if ( is_numeric( $label ) ) {
-
-								$exploded_data = explode( '#', $data );
-								if ( isset( $exploded_data[1] ) ) {
-									$am_points = $am_points + $exploded_data[1]; // Add up AM points for each race
-								}
-
-								$points = $points + $exploded_data[0]; // Add up points for each race
-
-							}
-
-							// if $only is set, then we need to ignore all other values
-							if ( null != $only ) {
-								foreach ( $only as $only_col => $only_value ) {
-									if (
-										trim( $label ) === trim( $only_col )
-										&&
-										trim( $data ) !== trim( $only_value )
-									) {
-										$remove = true;
-									}
-								}
-							}
-
-						}
-					}
-
-				}
-
-				// Only stash results if team or username is listed
-				if ( isset( $result['Team'] ) || isset( $result['Username'] ) ) {
-
-					// Add points to array (they're not in by default as we still needed to calculate them)
-					$result['Pts'] = $points;
-					$result['AM Pts'] = $am_points;
-
-					// Include, if matches the required data for $only (which may or may not be set)
-					if ( false === $remove ) {
-						$results[$key] = $result;
-					}
-
-				}
-
-			}
-
+		// Set Season
+		if ( isset( $args['season'] ) ) {
+			$season_slug = $args['season'];
+		} else {
+			return 'No season set';
 		}
 
-		// Sort rows in the order requested
-		if ( null != $orderby ) {
+		// Get order into array
 
-			$this->orderby = $orderby;
-			if ( true === $reverse ) {
-				usort( $results, array( $this, 'sort_callback_reverse' ) );
-			} else {
-				usort( $results, array( $this, 'sort_callback' ) );
+		$order = array(
+			'Team',
+			'Pts',
+		);
+
+		$teams = src_get_teams( $season_slug );
+
+		$content = '';
+		if ( is_array( $teams ) ) {
+			$content .= '<table>';
+
+			$content .= '<thead><tr>';
+			$content .= '<th>' . esc_html__( 'Pos', 'src' ) . '</th>';
+			$content .= '<th>' . esc_html__( 'Team', 'src' ) . '</th>';
+			$content .= '<th>' . esc_html__( 'Pts', 'src' ) . '</th>';
+			$content .= '</tr></thead>';
+
+			$count = 0;
+			foreach ( $teams as $team => $points ) {
+				$count++;
+
+				$content .= '<tr>';
+				$content .= '<td>' . esc_html( $count ) . '</td>';
+				$content .= '<td>' . esc_html( $team ) . '</td>';
+				$content .= '<td>' . esc_html( $points ) . '</td>';
+				$content .= '</tr>';
+
 			}
+			$content .= '</table>';
 		}
 
-		// Sort columns (and remove those not specified)
-		if ( false != $order ) {
-			$old_results = $results;
-			foreach ( $old_results as $row_number => $row ) {
+		return $content;
 
-				unset( $results[$row_number] );
-				foreach ( $order as $x => $column ) {
-					if ( isset( $row[$column] ) ) {
-						$results[$row_number][$column] = $row[$column];
-					}
-				}
-
-
-			}
-
-		}
-
-		// Finally, return the results
-		return $results;
 	}
 
 	function sort_callback( $a, $b ) {
