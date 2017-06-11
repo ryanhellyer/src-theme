@@ -77,98 +77,95 @@ get_header();
 	</div><!-- .slider-outer -->
 </section><!-- #latest-news -->
 
+<section id="schedule">
+	<div class="slider" data-slides="6">
+		<ul class="slider-inner"><?php
+
+$season_slug = '3';
+
+			$count = 0;
+			foreach ( src_get_events( $season_slug ) as $number => $event ) {
+				$count++;
+
+				$timestamp = $event['event_race-1_timestamp'];
+
+				$text1 = $event['track_name'];
+
+				if ( ! isset( $future ) && $timestamp > time() ) {
+					$future = true;
+
+					$extra_class = ' double-slide';
+					$data_width = ' data-width="2"';
+
+					$text2 = '
+					<h2>' . sprintf( esc_html__( 'Round %s: %s' ), $count, $event['track_name'] )  . '</h2>';
+
+					if ( isset( $event['event_qualifying_timestamp'] ) && '' !== $event['event_qualifying_timestamp'] ) {
+						$date_qual  = get_date_from_gmt( date( get_option( 'date_format' ), $event['event_qualifying_timestamp'] ), get_option( 'date_format' ) );
+						$time_qual  = get_date_from_gmt( date( get_option( 'time_format' ), $event['event_qualifying_timestamp'] ), get_option( 'time_format' ) ) . ' CET';
+						$text2 .= '
+					<span>
+						' . esc_html( 'Qualifying', 'src' ) . ': <date>' . esc_html( $time_qual ) . ', ' . esc_html( $date_qual ) . '</date>
+					</span>';
+					}
+
+					if ( isset( $event['event_race-1_timestamp'] ) && '' !== $event['event_race-1_timestamp'] ) {
+						$date_race1 = get_date_from_gmt( date( get_option( 'date_format' ), $event['event_race-1_timestamp'] ), get_option( 'date_format' ) );
+						$time_race1 = get_date_from_gmt( date( get_option( 'time_format' ), $event['event_race-1_timestamp'] ), get_option( 'time_format' ) ) . ' CET';
+						$text2 .= '
+					<span>
+						' . esc_html( 'Race 1', 'src' ) . ': <date>' . esc_html( $time_race1 ) . ', ' . esc_html( $date_race1 ) . '</date>
+					</span>';
+					}
+
+					if ( isset( $event['event_race-2_timestamp'] ) && '' !== $event['event_race-2_timestamp'] ) {
+						$date_race2 = get_date_from_gmt( date( get_option( 'date_format' ), $event['event_race-2_timestamp'] ), get_option( 'date_format' ) );
+						$time_race2 = get_date_from_gmt( date( get_option( 'time_format' ), $event['event_race-2_timestamp'] ), get_option( 'time_format' ) ) . ' CET';
+						$text2 .= '
+					<span>
+						' . esc_html( 'Race 2', 'src' ) . ': <date>' . esc_html( $time_race2 ) . ', ' . esc_html( $date_race2 ) . '</date>
+					</span>';
+					}
+
+				} else {
+
+					$extra_class = '';
+					$data_width = '';
+
+					$text2 = '
+					<date>
+						<span>' . esc_html( date( 'd', $timestamp ) ) . '</span>
+						' . esc_html( date( 'M', $timestamp ) ) . '
+					</date>';
+
+				}
+
+				echo '
+			<li class="' . esc_attr( 'post-' . $count . ' slide' . $extra_class ) . '"' . $data_width . '>
+				<div>
+					<img src="' . esc_url( get_template_directory_uri() . '/images/flag1.png' ) . '" />
+					' . esc_html( $text1 ) .
+
+					/* Already escaped */
+					$text2
+
+					. '
+				</div>
+			</li>';
+
+			}
+
+
+			?>
+
+		</ul><!-- .slider-inner -->
+	</div><!-- .slider -->
+</section><!-- #schedule -->
+
 <?php
 
 if ( is_super_admin() ) {
 	?>
-<section id="schedule">
-	<div class="slider" data-slides="6">
-		<ul class="slider-inner">
-			<li class="post-1 slide">
-				<div>
-					<img src="http://dev-hellyer.kiwi/bbpress/wp-content/themes/src/images/flag1.png" />
-					Monaco - PERHAPS REMOVE THE FLAG AND ONLY HAVE BIG DATE, FOLLOWED BY RACE TRACK
-					<date>
-						<span>28</span>
-						May
-					</date>
-				</div>
-			</li>
-			<li class="post-2 slide">
-				<div>
-					<img src="http://dev-hellyer.kiwi/bbpress/wp-content/themes/src/images/flag2.png" />
-					Suzuka
-					<date>
-						<span>15</span>
-						July
-					</date>
-				</div>
-			</li>
-			<li class="post-3 double-slide slide" data-width="2">
-				<div>
-					<img src="http://dev-hellyer.kiwi/bbpress/wp-content/themes/src/images/flag3.png" />
-					Laguna Seca
-					<h2>Round 3: Laguna Seca</h2>
-					<span>
-						Race 2: <date>20:50 CET Saturday July 21 2017</date>
-					</span>
-					<span>
-						Race 1: <date>20:00 CET Saturday July 21 2017</date>
-					</span>
-					<span>
-						Qualifying: <date>19:40 CET Saturday July 21 2017</date>
-					</span>
-					<span>
-						Free Practice 2: <date>20:00 CET Friday July 20 2017</date>
-					</span>
-					<span>
-						Free Practice 1: <date>20:00 CET Friday July 20 2017</date>
-					</span>
-					</div>
-			</li>
-			<li class="post-4 slide">
-				<div>
-					<img src="http://dev-hellyer.kiwi/bbpress/wp-content/themes/src/images/flag1.png" />
-					Bathurst
-					<date>
-						<span>14</span>
-						August
-					</date>
-					</div>
-			</li>
-			<li class="post-5 slide">
-				<div>
-					<img src="http://dev-hellyer.kiwi/bbpress/wp-content/themes/src/images/flag3.png" />
-					Hockenheim
-					<date>
-						<span>21</span>
-						September
-					</date>
-				</div>
-			</li>
-			<li class="post-6 slide">
-				<div>
-					<img src="http://dev-hellyer.kiwi/bbpress/wp-content/themes/src/images/flag1.png" />
-					Bathurst
-					<date>
-						<span>14</span>
-						August
-					</date>
-				</div>
-			</li>
-			<li class="post-7 slide">
-				<div>
-					<img src="http://dev-hellyer.kiwi/bbpress/wp-content/themes/src/images/flag3.png" />
-					Hockenheim
-					<date>
-						<span>21</span>
-						September
-					</date>
-				</div>
-			</li>
-		</ul><!-- .slider-inner -->
-	</div><!-- .slider -->
-</section><!-- #schedule -->
 
 <section id="results">
 
