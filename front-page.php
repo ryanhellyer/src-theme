@@ -81,9 +81,8 @@ get_header();
 	<div class="slider" data-slides="6">
 		<ul class="slider-inner"><?php
 
-$season_slug = '3';
-
 			$count = 0;
+			$season_slug = get_option( 'src-season' );
 			foreach ( src_get_events( $season_slug ) as $number => $event ) {
 				$count++;
 
@@ -162,82 +161,73 @@ $season_slug = '3';
 	</div><!-- .slider -->
 </section><!-- #schedule -->
 
-<?php
-
-if ( is_super_admin() ) {
-	?>
-
 <section id="results">
 
-	<div class="other-race" style="background-image:url(http://dev-hellyer.kiwi/bbpress/wp-content/themes/src/images/track.jpg">
+	<div class="other-race" style="background-image:url(<?php echo home_url(); ?>/wp-content/themes/src/images/track.jpg">
 		<h2>Last Race</h2>
 		<p>Round 2<br />Monaco</p>
 	</div>
 
 	<div id="standings">
-		<h3>Driver Standings</h3>
-		<ul>
-			<li>Pro Drivers</li>
-			<li>Am Drivers</li>
-			<li>Teams</li>
-		</ul>
-		<table>
-			<tr>
-				<td class="pink"><span>1</span></td>
-				<td>Trek</td>
-				<td>Ferrari 458</td>
-				<td class="car"><img src="http://dev-hellyer.kiwi/bbpress/wp-content/themes/src/images/pink-car.jpg" /></td>
-				<td>949</td>
-			</tr>
-			<tr>
-				<td class="green"><span>2</span></td>
-				<td>Paul Rosanski</td>
-				<td>Audi R8</td>
-				<td class="car"><img src="http://dev-hellyer.kiwi/bbpress/wp-content/themes/src/images/green-car.jpg" /></td>
-				<td>86</td>
-			</tr>
-			<tr>
-				<td class="red"><span>3</span></td>
-				<td>Tango Foxx</td>
-				<td>BMW M6</td>
-				<td class="car"><img src="http://dev-hellyer.kiwi/bbpress/wp-content/themes/src/images/red-car.jpg" /></td>
-				<td>46</td>
-			</tr>
-			<tr>
-				<td class="pink"><span>4</span></td>
-				<td>Ryan Hellyer</td>
-				<td>Ferrari 458</td>
-				<td class="car"><img src="http://dev-hellyer.kiwi/bbpress/wp-content/themes/src/images/pink-car.jpg" /></td>
-				<td>24</td>
-			</tr>
-			<tr>
-				<td class="yellow"><span>5</span></td>
-				<td>Speedylu</td>
-				<td>Porsche 911</td>
-				<td class="car"><img src="http://dev-hellyer.kiwi/bbpress/wp-content/themes/src/images/yellow-car.jpg" /></td>
-				<td>11</td>
-			</tr>
-			<tr>
-				<td class="pink"><span>1</span></td>
-				<td>Trek</td>
-				<td>Ferrari 458</td>
-				<td class="car"><img src="http://dev-hellyer.kiwi/bbpress/wp-content/themes/src/images/pink-car.jpg" /></td>
-				<td>949</td>
-			</tr>
-			<tr>
-				<td class="green"><span>2</span></td>
-				<td>Paul Rosanski</td>
-				<td>Audi R8</td>
-				<td class="car"><img src="http://dev-hellyer.kiwi/bbpress/wp-content/themes/src/images/green-car.jpg" /></td>
-				<td>86</td>
-			</tr>
+		<h3><?php esc_html_e( 'Drivers Championship', 'src' ); ?></h3>
+		<table><?php
+
+		$season_slug = get_option( 'src-season' );
+
+		$order = array(
+			'Username',
+			'Nationality',
+			'Car',
+			'Team',
+			'Class',
+			'Pts',
+		);
+
+		$drivers = src_get_drivers( $season_slug );
+
+		$content = '';
+		if ( is_array( $drivers ) ) {
+			$content .= '<table>';
+
+			$count = 0;
+			foreach ( $drivers as $row_number => $driver ) {
+				$count++;
+
+				$username = $driver[0];
+
+				if ( $count < 9 ) {
+
+					$name = esc_html( src_get_display_name_from_username( $username ) );
+
+					$url = src_get_memberurl_from_username( $username );
+					if ( false !== $url ) {
+						$name = '<a href="' . esc_url( $url ) . '">' . esc_html( $name ) . '</a>';
+					}
+
+					$content .= '<tr>';
+					$content .= '<td>' . esc_html( $count ) . '</td>';
+					$content .= '<td>' . $name /* Escaped already */ . '</td>';
+					$content .= '<td>' . esc_html( $driver[3] ) . '</td>';
+					$content .= '<td>' . esc_html( src_get_driver_points( $season_slug, $username ) ) . '</td>';
+
+					$content .= '</tr>';
+
+				}
+
+			}
+			$content .= '</table>';
+		}
+		echo $content;
+
+		?>
+
 		</table>
 
-		<a href="#" class="highlighted-link">See all championship standings</a>
+		<a href="<?php echo esc_url( home_url() . '/championship/' ); ?>" class="highlighted-link">See all championship standings</a>
 
 	</div>
 
-	<div class="other-race" style="background-image:url(http://dev-hellyer.kiwi/bbpress/wp-content/themes/src/images/track.jpg">
+	<div class="other-race" style="background-image:url(<?php echo home_url(); ?>/wp-content/themes/src/images/rosanski.jpg">
 		<h2>Next Race</h2>
 		<p>Round 4<br />Bathurst</p>
 	</div>
@@ -245,6 +235,5 @@ if ( is_super_admin() ) {
 </section><!-- #results -->
 
 <?php
-}
 
 get_footer();

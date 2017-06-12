@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Seasons.
+ * Available Cars.
  *
  * @copyright Copyright (c), Ryan Hellyer
  * @license http://www.gnu.org/licenses/gpl.html GPL
@@ -9,7 +9,7 @@
  * @package SRC Theme
  * @since SRC Theme 1.0
  */
-class SRC_Seasons extends SRC_Core {
+class SRC_Availble_Cars extends SRC_Core {
 
 	/**
 	 * Constructor.
@@ -20,7 +20,6 @@ class SRC_Seasons extends SRC_Core {
 		// Add action hooks
 		add_action( 'init',            array( $this, 'init' ) );
 		add_action( 'cmb2_admin_init', array( $this, 'events_metaboxes' ) );
-		add_action( 'cmb2_admin_init', array( $this, 'cars_metaboxes' ) );
 		add_action( 'add_meta_boxes',  array( $this, 'add_metaboxes' ) );
 		add_action( 'save_post',       array( $this, 'meta_boxes_save' ), 10, 2 );
 
@@ -32,11 +31,11 @@ class SRC_Seasons extends SRC_Core {
 	public function init() {
 
 		register_post_type(
-			'season',
+			'cars',
 			array(
-				'public' => true,
-				'label'  => __( 'Season', 'src' ),
-				'supports' => array( 'thumbnail', 'title', 'editor' )
+				'public' => false,
+				'label'  => __( 'Cars', 'src' ),
+				'supports' => array( 'title' )
 			)
 		);
 
@@ -111,44 +110,6 @@ class SRC_Seasons extends SRC_Core {
 			) );
 
 		}
-
-	}
-
-	/**
-	 * Hook in and add a metabox to demonstrate repeatable grouped fields
-	 */
-	public function cars_metaboxes() {
-		$slug = 'car';
-
-		$cmb = new_cmb2_box( array(
-			'id'           => $slug,
-			'title'        => esc_html__( 'Cars', 'src' ),
-			'object_types' => array( 'season', ),
-		) );
-
-		$group_field_id = $cmb->add_field( array(
-			'id'          => $slug,
-			'type'        => 'group',
-			'description' => esc_html__( 'Add all the cars here.', 'src' ),
-			'options'     => array(
-				'group_title'   => esc_html__( 'Car {#}', 'src' ), // {#} gets replaced by row number
-				'add_button'    => esc_html__( 'Add Another Car', 'src' ),
-				'remove_button' => esc_html__( 'Remove Car', 'src' ),
-				'sortable'      => true, // beta
-			),
-		) );
-
-		$cmb->add_group_field( $group_field_id, array(
-			'name' => esc_html__( 'Manufacturer', 'src' ),
-			'id'   => 'manufacturer',
-			'type' => 'text',
-		) );
-
-		$cmb->add_group_field( $group_field_id, array(
-			'name' => esc_html__( 'Model', 'src' ),
-			'id'   => 'model',
-			'type' => 'text',
-		) );
 
 	}
 

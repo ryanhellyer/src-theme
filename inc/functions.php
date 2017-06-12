@@ -215,7 +215,94 @@ function src_reorder_subarray( $a, $b ) {
 	return $b[6] - $a[6];
 }
 
+add_shortcode( 'src-available-cars', 'src_available_cars_shortcode' );
+function src_available_cars_shortcode() {
 
+$season_slug = 3;
+
+	// Form array of available car information
+	$available_cars = array();
+	foreach ( src_get_available_cars( $season_slug ) as $key => $car ) {
+		$available_cars[$key]['manufacturer'] = $car['manufacturer'];
+		$available_cars[$key]['model']        = $car['model'];
+
+		foreach ( src_get_drivers( $season_slug ) as $x => $driver ) {
+
+			if ( $car['manufacturer'] . ' ' . $car['model'] === $driver[3] ) {
+				$available_cars[$key]['taken_by'] = $driver[4];
+			}
+
+		}
+
+		if ( isset( $available_cars[$key]['taken_by'] ) ) {
+			$available_cars[$key]['available'] = src_how_many_spots_left_in_team( $season_slug, $driver[4] );
+		} else {
+			$available_cars[$key]['available']    = 2; // Add default number of cars available
+		}
+
+	}
+
+	$content = '<table>
+	<tr>
+		<th></th>
+		<th>Manufacturer</th>
+		<th>Model</th>
+		<th>Remaining</th>
+	</tr>';
+	$count = 0;
+	foreach ( $available_cars as $key => $car ) {
+		$count++;
+
+		$strike = '';
+
+		if ( 0 === $car['available'] ) {
+			$strike = '<s>';
+		}
+
+		$content .= '<tr>';
+
+		$content .= '<td>' . $strike . absint( $count ) . $strike . '</td>';
+		$content .= '<td>' . $strike . esc_html( $car['manufacturer'] ) . $strike . '</td>';
+		$content .= '<td>' . $strike . esc_html( $car['model'] ) . $strike . '</td>';
+
+		$content .= '<td>' . $strike . esc_html( $car['available'] ) . $strike . '</td>';
+
+		$content .= '</tr>';
+	}
+
+	$content .= '</table>';
+
+	return $content;
+}
+
+function src_how_many_spots_left_in_team( $season_slug, $team_name ) {
+
+	$number = 0;
+	foreach ( src_get_drivers( $season_slug ) as $key => $driver ) {
+
+		if ( $team_name === $driver[4] ) {
+			$number++;
+		}
+
+	}
+
+	$number_left = max( 2 - $number, 0 );
+
+	return $number_left;
+}
+
+function src_get_available_cars( $season_slug ) {
+	return src_get_all_cars( $season_slug );	
+}
+
+function src_get_all_cars( $season_slug ) {
+
+	$season_id = src_get_id_from_slug( $season_slug, 'season' );
+
+	$cars = get_post_meta( $season_id, 'car', true );
+
+	return $cars;
+}
 
 
 /**
