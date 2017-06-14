@@ -110,6 +110,7 @@ require( 'inc/class-src-admin.php' );
 require( 'inc/class-src-setup.php' );
 require( 'inc/class-src-registration.php' );
 require( 'inc/class-src-gallery.php' );
+require( 'inc/class-src-available-cars.php' );
 
 require( 'inc/functions.php' );
 
@@ -120,3 +121,4 @@ new SRC_Members;
 new SRC_Seasons;
 new SRC_Registration;
 new SRC_Gallery;
+new SRC_Available_Cars;
