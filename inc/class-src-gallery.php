@@ -33,6 +33,16 @@ class SRC_Gallery extends SRC_Core {
 	 */
 	public function init() {
 
+		// Quick security check
+		if (
+			! is_user_logged_in()
+			||
+			false === wp_verify_nonce( $_POST['src-gallery-nonce'], 'src-gallery-nonce' )
+		) {
+			return;
+		}
+
+		// Upload all the thingz!!!
 		if ( isset( $_FILES['gallery-file']['tmp_name'] ) ) {
 
 			require_once ( ABSPATH . 'wp-admin/includes/file.php' );
@@ -63,25 +73,52 @@ class SRC_Gallery extends SRC_Core {
 			wp_update_attachment_metadata( $attachment_id, $attachment_data );
 
 			set_post_thumbnail( get_the_ID(), $attachment_id );
+		}
 
-			$event_exploded = explode( $this->spacer, $_POST['event'] );
-			$event = array(
-				'season' => wp_kses_post( $event_exploded[0] ),
-				'event'  => wp_kses_post( $event_exploded[1] ),
-			);
-			update_post_meta( $attachment_id, 'src_event', $event );
+		if (
+			isset( $_FILES['gallery-file']['tmp_name'] )
+			||
+			isset( $_POST['src-gallery-edit'] )
+		) {
 
-			$drivers = array();
-			foreach ( $_POST['drivers'] as $key => $driver_id ) {
-				$driver_id = absint( $driver_id );
-				$drivers[] = $driver_id;
+			// Get attachment ID
+			if ( isset( $_POST['src-gallery-edit'] ) ) {
+				$attachment_id = get_the_ID();
 
-				// Stash in users meta here
-				update_user_meta( $driver_id, 'gallery_image', $event );
+				// Update attachment title
+				$post_title = $_POST['post_title'];
+				$args = array(
+					'ID'           => $attachment_id,
+					'post_title'   => wp_kses_post( $post_title ),
+				);
+				wp_update_post( $args );
 
 			}
 
-			update_post_meta( $attachment_id, 'src_drivers', $drivers );
+			$event_exploded = explode( $this->spacer, $_POST['event'] );
+			if ( isset( $event_exploded[0] ) && isset( $event_exploded[1] ) ) {
+				$event = array(
+					'season' => wp_kses_post( $event_exploded[0] ),
+					'event'  => wp_kses_post( $event_exploded[1] ),
+				);
+				update_post_meta( $attachment_id, 'src_event', $event );
+			}
+
+			$drivers = array();
+			if ( isset( $_POST['drivers'] ) && is_array( $_POST['drivers'] ) ) {
+				delete_user_meta( $driver_id, 'gallery_image' ); // Delete user meta to avoid repeated duplicates on update
+				foreach ( $_POST['drivers'] as $key => $driver_id ) {
+					$driver_id = absint( $driver_id );
+					$drivers[] = $driver_id;
+
+					// Stash in users meta here
+					add_user_meta( $driver_id, 'gallery_image', $attachment_id );
+
+				}
+
+				update_post_meta( $attachment_id, 'src_drivers', $drivers );
+			}
+
 		}
 
 	}
@@ -93,11 +130,12 @@ class SRC_Gallery extends SRC_Core {
 			return;
 		}
 
+		echo '<p>';
+
 		// The event
 		$event = get_post_meta( get_the_ID(), 'src_event', true );
 		if ( is_array( $event ) ) {
 
-//print_r( $event );
 			$args = array(
 				'name'                   => $event['season'],
 				'post_type'              => 'season',
@@ -121,12 +159,12 @@ class SRC_Gallery extends SRC_Core {
 						}
 					}
 
-					?>
-
-					<p>
-						<?php esc_html_e( 'Event', 'src' ); ?>: 
-						<?php the_title(); ?> &ndash; <?php echo esc_html( $event_name ); ?>
-					</p><?php
+					esc_html_e( 'Event', 'src' );
+					echo ': ';
+					the_title();
+					echo ' &ndash; ';
+					echo esc_html( $event_name );
+					echo '. ';
 
 				}
 			}
@@ -169,10 +207,29 @@ class SRC_Gallery extends SRC_Core {
 
 			}
 
-			echo '
-			<p>
-				' . esc_html__( 'Drivers', 'src' ) . ': ' . $string /* Already escaped */ . '
-			</p>';
+			echo esc_html__( 'Drivers', 'src' ) . ': ' . $string /* Already escaped */;
+
+		}
+
+
+		if ( is_user_logged_in() ) {
+			echo ' &nbsp; <a style="display:inline;float:none;" id="add-a-photo" href="#">(' . esc_html__( 'edit image meta', 'src' ) . ')</a>';
+		}
+
+		echo '<p>';
+
+		previous_image_link( false, '<p class="alignleft button">&laquo; ' . __( 'Previous Image', 'src' ) . '</p>' );
+		next_image_link( false, '<p class="alignright button">' . __( 'Next Image', 'src' ) . ' &raquo;</p>' );
+
+		if ( is_user_logged_in() ) {
+			echo '<div id="gallery-uploader">
+
+
+<h1>NEED TO ENSURE THAT ONLY POST AUTHOR AND EDITORS CAN EDIT ATTACHMENTS</h1>
+
+
+
+' . $this->form_edit() . '</div>';
 		}
 
 	}
@@ -181,13 +238,46 @@ class SRC_Gallery extends SRC_Core {
 
 		$content = '
 		<form method="POST" action="" enctype="multipart/form-data">
+			' . $this->form_fields() . '
+			<p>
+				<input name="gallery-file" type="file" />
+			</p>
+			<p>
+				<input type="submit" value="' . esc_html__( 'Submit', 'src' ) . '" />
+			</p>
+		</form>';
+
+		return $content;
+	}
+
+	public function form_edit() {
+
+		$content = '
+		<form method="POST" action="">
+			' . $this->form_fields() . '
+			<input name="src-gallery-edit" value="' . esc_attr( get_the_ID() ) . '" type="hidden" />
+			<p>
+				<input type="submit" value="' . esc_html__( 'Submit', 'src' ) . '" />
+			</p>
+		</form>';
+
+		return $content;
+	}
+
+
+	public function form_fields() {
+
+		$content = wp_nonce_field( 'src-gallery-nonce', 'src-gallery-nonce', true, false );
+
+		$content .= '
 			<p>
 				<label>' . esc_html__( 'Title', 'src' ) . '</label>
 				<input name="post_title" type="text" />
 			</p>
 			<p>
-				<label>' . esc_html__( 'Tag race', 'src' ) . '</label>
-				<select name="event">';
+				<label>' . esc_html__( 'Race', 'src' ) . '</label>
+				<select name="event">
+					<option value="">None</option>';
 
 		$args = array(
 			'post_type'              => 'season',
@@ -220,7 +310,7 @@ class SRC_Gallery extends SRC_Core {
 				</select>
 			</p>
 			<p>
-				<label>' . esc_html__( 'Tag drivers', 'src' ) . '</label>
+				<label>' . esc_html__( 'Drivers', 'src' ) . '</label>
 				<select name="drivers[]" multiple="multiple">';
 
 		foreach ( src_get_drivers_from_all_seasons() as $id => $name ) {
@@ -229,14 +319,7 @@ class SRC_Gallery extends SRC_Core {
 
 		$content .= '
 				</select>
-			</p>
-			<p>
-				<input name="gallery-file" type="file" />
-			</p>
-			<p>
-				<input type="submit" value="Submit" />
-			</p>
-		</form>';
+			</p>';
 
 		return $content;
 	}
