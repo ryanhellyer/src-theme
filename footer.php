@@ -36,10 +36,10 @@
 <?php
 
 if ( is_user_logged_in() ) {
-	$url = home_url();
+	$url = home_url( '/rules/' );
 	$text = __( 'Rules', 'src' );
 } else {
-	$url = 'thesignuppage';
+	$url = home_url( '/register/' );
 	$text = __( 'Sign Up', 'src' );
 }
 

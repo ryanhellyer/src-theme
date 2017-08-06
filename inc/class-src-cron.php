@@ -148,19 +148,73 @@ if(isset($_GET['test']) && 'process'===$_GET['test']){add_action('template_redir
 
 				}
 				ksort( $ordered_events );
-//print_r( $ordered_events );
 				$prev_events = $all_held_events = array();
 				$reached = false;
+				$total_rounds_held_so_far = $total_races_held_so_far = 0;
 				foreach ( $ordered_events as $key => $event ) {
 
-					if (
-						( $name === $event['name'] || $name === $event['track_name'] )
-
-					) {
+					if ( ( $name === $event['name'] || $name === $event['track_name'] ) ) {
 						$all_held_events[$key] = $event;
 						$reached = true;
+						$total_races_held_so_far++;
+
 					} else if ( true !== $reached ) {
 						$prev_events[$key] = $all_held_events[$key] = $event;
+						$total_races_held_so_far++;
+					}
+
+					if (
+						$name === $event['name']
+						||
+						$name === $event['track_name']
+						||
+						true !== $reached
+					) {
+
+						//
+						if ( ! isset( $held_round[ $event['name'] ] ) ) {
+							$total_rounds_held_so_far++;
+						}
+
+						$held_round[ $event['name'] ] = true;
+
+					}
+
+				}
+
+/*
+				foreach ( $all_held_events as $key => $event ) {
+print_r( $event );echo "\n............\n";
+
+// Setting total rounds held so far
+$total_rounds_held_so_far++;
+
+// Setting total races held so far
+foreach ( array( 1, 2, 3 ) as $x ) {
+	if ( isset( $event['event_race-' . $x . '_timestamp'] ) && '' !== $event['event_race-' . $x . '_timestamp'] ) {
+		$total_races_held_so_far++;
+//		echo $event['track_name'] . ' ... ' . $total_rounds_held_so_far . ' - ' . $total_races_held_so_far . ': ' . print_r( $event['event_race-' . $x . '_timestamp'], true ) . "\n.............\n";
+	}
+}
+
+				}
+die;
+*/
+
+
+				// Get how many races at last round, and round before last
+				$rounds['current'] = array_values( array_slice( $all_held_events, -1 ) ) [0];
+				$rounds['last'] = array_values( array_slice( $prev_events, -1 ) ) [0];
+
+				foreach ( $rounds as $key => $round ) {
+
+					$count = 1;
+					foreach ( array( 1, 2, 3 ) as $x ) {
+
+						if ( isset( $round['event_race-' . $x . '_timestamp'] ) && '' !== $round['event_race-' . $x . '_timestamp'] ) {
+							$race_counts[$key] = $count;
+							$count++;
+						}
 					}
 
 				}
@@ -169,24 +223,45 @@ if(isset($_GET['test']) && 'process'===$_GET['test']){add_action('template_redir
 				$results_as_of_last_round = $results_current = array();
 				$last_round_points_total = $current_points_total = 0;
 				$raw_results = src_get_results( $season_slug );
-				foreach ( $raw_results as $key => $driver ) {
+				$results = array();
+				foreach ( $raw_results as $driver => $driver_data ) {
 					$last_round_points_total = $current_points_total = 0;
 
-					foreach ( $driver as $x => $points ) {
+					foreach ( $driver_data as $x => $points ) {
 
 						if ( $x <= count( $prev_events ) ) {
 							$last_round_points_total = $last_round_points_total + $points;
 							if ( 0 !== $last_round_points_total ) {
-								$results_as_of_last_round[$key] = $last_round_points_total;
+								$results_as_of_last_round[$driver] = $last_round_points_total;
 							}
 						}
 
 						if ( $x <= count( $all_held_events ) ) {
 							$current_points_total = $current_points_total + $points;
 							if ( 0 !== $current_points_total ) {
-								$results_current[$key] = $current_points_total;
+								$results_current[$driver] = $current_points_total;
 							}
+
+							// List how many DNF's the driver has had so far this season
+							if ( 'DNF' === $points ) {
+								$results[$driver]['total_dnfs'] = 1;
+								if ( isset( $results[$driver]['total_dnfs'] ) ) {
+									$results[$driver]['total_dnfs'] = $results[$driver]['total_dnfs'] + 1;
+								}
+							}
+
 						}
+
+//print_r( $race_counts ); echo "\n\n";
+//$x = array_slice( $driver_data, - 2, 2, true );
+//print_r( $x );
+//die;
+
+
+
+$results_from_current_race = array_slice( $driver_data, - $race_counts['current'], $race_counts['current'], true );
+$results[$driver]['current-results'] = 'WRONG';//$results_from_current_race;
+// Need to convert points into race positions
 
 					}
 
@@ -203,7 +278,6 @@ if(isset($_GET['test']) && 'process'===$_GET['test']){add_action('template_redir
 				$prev_event = array_pop( $sliced );
 
 				// 
-				$results = array();
 				$current_position = 0;
 				foreach ( $results_current as $driver => $points ) {
 					$current_position++;
@@ -293,58 +367,14 @@ if(isset($_GET['test']) && 'process'===$_GET['test']){add_action('template_redir
 						$number_of_races_at_prev_event++;
 					}
 
-/*
-					// Points at previous round
-					$driver_results = src_get_driver_results( $season_slug, $driver );
-					krsort( $driver_results );
-print_r( $driver_results );
-echo "\n....................\n";
-					$count = 0;
-					foreach ( $driver_results as $key => $d_points ) {
-						$count++;
-
-						if ( $number_of_races_at_prev_event >= $count ) {
-							$dx_points[] = $d_points;
-						}
-
-					}
-					$results[$driver]['points_at_prev_round'] = $dx_points;
-
-					// Points at current round
-					$driver_results = src_get_driver_results( $season_slug, $driver );
-					krsort( $driver_results );
-					$count = 0;
-					foreach ( $driver_results as $key => $d_points ) {
-						$count++;
-
-						if ( $number_of_races_at_prev_event >= $count ) {
-							$dx_points[] = $d_points;
-						}
-
-					}
-					$results[$driver]['points_at_prev_round'] = $dx_points;
-
-*/
-
-
-
-
-//print_r( $results );
-//			echo "\n";
-//			print_r( $dx_points );
-
-//die;
-//print_r( $results[$driver]['season'] );
-
-echo 'Current event:';
-print_r( $current_event );
-
-
-echo 'Prev event';
-print_r( $prev_event );
-
-
 				}
+
+echo 'Total rounds held so far: ' . $total_rounds_held_so_far . "\n";
+echo 'Total races held so far: ' . $total_races_held_so_far . "\n\n";
+
+echo 'How many races in current and previous round: ' . "\n";
+print_r( $race_counts );
+echo "\n\n";
 
 echo "Needed:
 Position in race 1
