@@ -1,5 +1,8 @@
 <?php
-add_option( 'src_registration_thanks_page', 'xxx' );
+
+add_option( 'src_featured_page', '' );
+add_option( 'src-season', '' );
+
 /*
 if (  'dev-hellyer.kiwi' !== $_SERVER['HTTP_HOST']      && ! is_user_logged_in() && ! is_admin() && $GLOBALS['pagenow'] != 'wp-login.php' ) {
 
@@ -31,26 +34,17 @@ if (  'dev-hellyer.kiwi' !== $_SERVER['HTTP_HOST']      && ! is_user_logged_in()
 
 
 require( 'inc/class-src-core.php' );
-require( 'inc/class-src-bbpress.php' );
-require( 'inc/class-src-bbcode.php' );
-require( 'inc/class-src-seasons.php' );
-require( 'inc/class-src-results.php' );
-require( 'inc/class-src-members.php' );
 require( 'inc/class-src-admin.php' );
 require( 'inc/class-src-setup.php' );
-require( 'inc/class-src-registration.php' );
 require( 'inc/class-src-gallery.php' );
-require( 'inc/class-src-available-cars.php' );
 require( 'inc/class-src-cron.php' );
+require( 'inc/class-src-tracks.php' );
+require( 'inc/class-src-seasons.php' );
 
 require( 'inc/functions.php' );
 
 new SRC_Admin;
-new SRC_BBCode;
-new SRC_Results;
-new SRC_Members;
-new SRC_Seasons;
-new SRC_Registration;
 new SRC_Gallery;
-new SRC_Available_Cars;
 new SRC_Cron();
+new SRC_Tracks();
+new SRC_Seasons();

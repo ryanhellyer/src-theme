@@ -22,17 +22,7 @@
 
 <header id="site-header" role="banner">
 
-<?php
-if ( is_user_logged_in() ) {
-	?><a class="sign-up" href="<?php bbp_user_profile_url( bbp_get_current_user_id() ); ?>"><?php esc_html_e( 'Welcome', 'src' ); ?> <span><?php esc_html_e( 'View Profile', 'src' ); ?></span></a><?php
-} else {
-	?><a class="sign-up" href="<?php echo esc_url( home_url( '/register/' ) ); ?>"><?php esc_html_e( 'Login or', 'src' ); ?> <span><?php esc_html_e( 'Join Us', 'src' ); ?></span></a><?php
-}
-?>
-
-
-	<h1><a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php esc_attr_e( get_bloginfo( 'name', 'display' ) ); ?>"><?php esc_html_e( get_bloginfo( 'name', 'display' ) ); ?></a></h1>
-	<nav id="main-menu-wrap">
+	<nav><?php /*
 		<ul id="main-menu"><?php
 
 			echo "\n\n";
@@ -48,61 +38,53 @@ if ( is_user_logged_in() ) {
 
 			?>
 
-		</ul>
+		</ul>*/?>
 	</nav>
+
+	<h1><a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php esc_attr_e( get_bloginfo( 'name', 'display' ) ); ?>"><?php esc_html_e( get_bloginfo( 'name', 'display' ) ); ?></a></h1>
 
 </header><!-- #site-header -->
 
 <?php
 
-if ( is_front_page() ) {
+if ( is_single() || is_page() ) {
 
+	$title = get_the_title( get_the_ID() );
+	$content = '';
+	$image_url = get_the_post_thumbnail_url( get_the_ID() );
 
-	if ( is_user_logged_in() ) {
+} else {
 
-		$args = array(
-			'post_type'              => 'topic',
-			'meta_key'               => '_thumbnail_id',
-			'posts_per_page'         => 1,
-			'no_found_rows'          => true,  // useful when pagination is not needed.
-			'update_post_meta_cache' => false, // useful when post meta will not be utilized.
-			'update_post_term_cache' => false, // useful when taxonomy terms will not be utilized.
-			'fields'                 => 'ids'
-		);
-
-	} else {
-
-		$args = array(
-			'post_type'              => 'any',
-			'post_status'            => 'private',
-			'posts_per_page'         => 1,
-			'p'                      => get_option( 'src_featured_page' ),
-			'no_found_rows'          => true,  // useful when pagination is not needed.
-			'update_post_meta_cache' => false, // useful when post meta will not be utilized.
-			'update_post_term_cache' => false, // useful when taxonomy terms will not be utilized.
-			'fields'                 => 'ids',
-		) ;
-
-	}
+	$args = array(
+		'post_type'              => 'any',
+		'post_status'            => 'private',
+		'posts_per_page'         => 1,
+		'p'                      => get_option( 'src_featured_page' ),
+		'no_found_rows'          => true,  // useful when pagination is not needed.
+		'update_post_meta_cache' => false, // useful when post meta will not be utilized.
+		'update_post_term_cache' => false, // useful when taxonomy terms will not be utilized.
+		'fields'                 => 'ids',
+	) ;
 
 	$featured_item = new WP_Query( $args );
 	if ( $featured_item->have_posts() ) {
 		while ( $featured_item->have_posts() ) {
 			$featured_item->the_post();
 
-			?>
-
-<section id="featured-news" style="background-image: url(<?php echo esc_url( get_the_post_thumbnail_url() ); ?>">
-	<div class="text">
-		<h1><?php the_title(); ?></h1>
-		<a href="<?php the_permalink(); ?>" class="button"><?php esc_html_e( 'Read More', 'src' ); ?></a>
-	</div>
-</section><!-- #featured-news --><?php
-
+			$title = get_the_title();
+			$content = get_the_content();
+			$image_url = get_the_post_thumbnail_url();
 		}
 	}
 
 }
-?>
 
+			?>
+
+<section id="featured-news" style="background-image: url(<?php echo esc_url( $image_url ); ?>">
+	<div class="text">
+		<h1><?php echo esc_html( $title ); ?></h1>
+		<?php echo $content; /* shouldn't be escaped */ ?>
+	</div>
+</section><!-- #featured-news -->
 <main id="main">

@@ -4,8 +4,8 @@
  *
  * Contains the closing of the id=main div and all content after.
  *
- * @package SRC Theme
- * @since SRC Theme 1.0
+ * @package Undycar Theme
+ * @since Undycar Theme 1.0
  */
 ?>
 
@@ -32,21 +32,6 @@
 
 		?>
 	</ul><!-- #social-icons -->
-
-<?php
-
-if ( is_user_logged_in() ) {
-	$url = home_url( '/rules/' );
-	$text = __( 'Rules', 'src' );
-} else {
-	$url = home_url( '/register/' );
-	$text = __( 'Sign Up', 'src' );
-}
-
-?>
-	<a class="button" href="<?php echo esc_url( $url ); ?>">
-		<?php esc_html_e( 'Rules', 'src' ); ?> <span><?php esc_html( $text ); ?></span>
-	</a><!-- .sign-up -->
 
 	<ul id="footer-menu"><?php
 

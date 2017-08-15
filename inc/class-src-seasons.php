@@ -20,7 +20,6 @@ class SRC_Seasons extends SRC_Core {
 		// Add action hooks
 		add_action( 'init',            array( $this, 'init' ) );
 		add_action( 'cmb2_admin_init', array( $this, 'events_metaboxes' ) );
-		add_action( 'cmb2_admin_init', array( $this, 'cars_metaboxes' ) );
 //		add_action( 'save_post',       array( $this, 'meta_boxes_save' ), 10, 2 );
 
 	}
@@ -66,23 +65,10 @@ class SRC_Seasons extends SRC_Core {
 		) );
 
 		$cmb->add_group_field( $group_field_id, array(
-			'name' => esc_html__( 'Track Name', 'src' ),
-			'id'   => 'track_name',
-			'type' => 'text',
-		) );
-
-		$cmb->add_group_field( $group_field_id, array(
-			'name' => esc_html__( 'Track Country', 'src' ),
-			'id'         => 'country',
+			'name' => esc_html__( 'Track', 'src' ),
+			'id'         => 'track',
 			'type'       => 'select',
-			'options_cb' => 'src_get_countries',
-		) );
-
-		$cmb->add_group_field( $group_field_id, array(
-			'name' => esc_html__( 'Event Name', 'src' ),
-			'description' => esc_html__( 'Usually in the format "Round 3: Laguna Seca"', 'src' ),
-			'id'   => 'name',
-			'type' => 'text',
+			'options_cb' => 'src_get_tracks',
 		) );
 
 		$cmb->add_group_field( $group_field_id, array(
@@ -90,13 +76,6 @@ class SRC_Seasons extends SRC_Core {
 			'description' => esc_html__( 'List the length of races, and any other relevant information specific to this event.', 'src' ),
 			'id'   => 'description',
 			'type' => 'textarea_small',
-		) );
-
-		$cmb->add_group_field( $group_field_id, array(
-			'name' => esc_html__( 'Event Image', 'src' ),
-			'description' => esc_html__( 'This will most likely be a an image of the track.', 'src' ),
-			'id'   => 'image',
-			'type' => 'file',
 		) );
 
 		foreach ( $this->event_types() as $name => $desc ) {
@@ -110,44 +89,6 @@ class SRC_Seasons extends SRC_Core {
 			) );
 
 		}
-
-	}
-
-	/**
-	 * Hook in and add a metabox to demonstrate repeatable grouped fields
-	 */
-	public function cars_metaboxes() {
-		$slug = 'car';
-
-		$cmb = new_cmb2_box( array(
-			'id'           => $slug,
-			'title'        => esc_html__( 'Cars', 'src' ),
-			'object_types' => array( 'season', ),
-		) );
-
-		$group_field_id = $cmb->add_field( array(
-			'id'          => $slug,
-			'type'        => 'group',
-			'description' => esc_html__( 'Add all the cars here.', 'src' ),
-			'options'     => array(
-				'group_title'   => esc_html__( 'Car {#}', 'src' ), // {#} gets replaced by row number
-				'add_button'    => esc_html__( 'Add Another Car', 'src' ),
-				'remove_button' => esc_html__( 'Remove Car', 'src' ),
-				'sortable'      => true, // beta
-			),
-		) );
-
-		$cmb->add_group_field( $group_field_id, array(
-			'name' => esc_html__( 'Manufacturer', 'src' ),
-			'id'   => 'manufacturer',
-			'type' => 'text',
-		) );
-
-		$cmb->add_group_field( $group_field_id, array(
-			'name' => esc_html__( 'Model', 'src' ),
-			'id'   => 'model',
-			'type' => 'text',
-		) );
 
 	}
 
