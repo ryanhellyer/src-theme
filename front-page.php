@@ -47,58 +47,69 @@ if ( have_posts() ) {
 <section id="schedule">
 	<ul><?php
 
-	$season_id = get_option( 'src-season' );
-
 	$query = new WP_Query( array(
-		'p'   => $season_id,
-		'post_type' => 'season',
-		'posts_per_page' => 1,
-		'no_found_rows' => true,
+		'post_type'      => 'event',
+		'post_status'    => 'future',
+		'posts_per_page' => 5,
+		'no_found_rows'  => true,
 		'update_post_meta_cache' => false,
 		'update_post_term_cache' => false,
-		'fields' => 'ids'
+		'fields'         => 'ids'
 	) );
 
 	if ( $query->have_posts() ) {
+		$count = 0;
 		while ( $query->have_posts() ) {
 			$query->the_post();
+			$count++;
 
-			$count = 0;
-			$events = get_post_meta( get_the_ID(),  'event', true );
-			foreach ( $events as $key => $event ) {
-				$count++;
+			$event_id = get_the_ID();
 
-				$track_query = new WP_Query( array(
-					'p'   => $event['track'],
-					'post_type' => 'track',
-					'posts_per_page' => 1,
-					'no_found_rows' => true,
-					'update_post_meta_cache' => false,
-					'update_post_term_cache' => false,
-					'fields' => 'ids'
-				) );
+			$track_id = get_post_meta( $event_id, 'track', true );
+			$track_query = new WP_Query( array(
+				'p'                      => $track_id,
+				'post_type'              => 'track',
+				'posts_per_page'         => 1,
+				'no_found_rows'          => true,
+				'update_post_meta_cache' => false,
+				'update_post_term_cache' => false,
+				'fields'                 => 'ids'
+			) );
 
-				if ( $track_query->have_posts() ) {
-					while ( $track_query->have_posts() ) {
-						$track_query->the_post();
+			if ( $track_query->have_posts() ) {
+				while ( $track_query->have_posts() ) {
+					$track_query->the_post();
 
-						?>
-			<li class="<?php echo esc_attr( 'post-' . $count ); ?>">
-				<div>
-					<img src="<?php echo esc_url( get_the_post_thumbnail_url() ); ?>" />
-					<h3 class="screen-reader-text"><?php the_title(); ?></h3>
-					road course
-					<date>
-						<span>08</span>
-						Apr
-					</date>
-				</div>
-			</li><?php
+					$track_logo = get_the_post_thumbnail_url();
+					$track_name = get_the_title( get_the_ID() );
+					$track_type_slug = get_post_meta( get_the_ID(), 'track_type', true );
+					$track_type = src_get_track_types()[$track_type_slug];
 
-					}
 				}
 
 			}
+
+			?>
+
+			<li class="<?php echo esc_attr( 'post-' . $count ); ?>">
+				<div>
+					<img src="<?php echo esc_url( $track_logo ); ?>" />
+					<h3 class="screen-reader-text"><?php echo esc_html( $track_name ); ?></h3>
+					<?php
+
+					echo esc_html( $track_type );
+
+					$month = get_the_date( 'M', $event_id );
+					$day_of_month = get_the_date( 'd', $event_id );
+					?>
+
+					<date>
+						<span><?php echo esc_html( $day_of_month ); ?></span>
+						<?php echo esc_html( $month ); ?>
+
+					</date>
+				</div>
+			</li><?php
 
 		}
 	}
@@ -110,7 +121,7 @@ if ( have_posts() ) {
 
 <section id="results">
 
-	<a href="<?php echo esc_url( home_url( '/rules/' ) ); ?>" class="other-race" style="background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url(<?php echo esc_url( get_template_directory_uri() . '/images/long2.png' ); ?>);">
+	<a href="<?php echo esc_url( home_url( '/car/' ) ); ?>" class="other-race" style="background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url(<?php echo esc_url( get_template_directory_uri() . '/images/long2.png' ); ?>);">
 		<h2>Dallara DW12</h2>
 		<p>Free with iRacing. Fixed setups provided for each track.</p>
 	</a>

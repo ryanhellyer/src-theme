@@ -49,8 +49,15 @@ class SRC_Tracks extends SRC_Core {
 
 		$cmb = new_cmb2_box( array(
 			'id'           => $slug,
-			'title'        => esc_html__( 'Tracks', 'src' ),
+			'title'        => esc_html__( 'Track Information', 'src' ),
 			'object_types' => array( 'track', ),
+		) );
+
+		$cmb->add_field( array(
+			'name' => esc_html__( 'Type', 'src' ),
+			'id'         => 'track_type',
+			'type'       => 'select',
+			'options_cb' => 'src_get_track_types',
 		) );
 
 		$cmb->add_field( array(

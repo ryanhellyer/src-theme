@@ -275,9 +275,77 @@ function src_get_tracks() {
 		while ( $query->have_posts() ) {
 			$query->the_post();
 
-			$tracks[get_the_ID()] = get_the_title();
+			$track_type = get_post_meta( get_the_ID(), 'track_type', true );
+			$tracks[get_the_ID()] = get_the_title() . ' - ' . src_get_track_types()[$track_type];
+
 		}
 	}
 
 	return $tracks;
+}
+
+/**
+ * Get every season.
+ *
+ * @return array
+ */
+function src_get_seasons() {
+
+	$tracks = array();
+
+	$query = new WP_Query( array(
+		'post_type' => 'season',
+		'posts_per_page' => 100
+	) );
+
+	$seasons = array();
+	if ( $query->have_posts() ) {
+		while ( $query->have_posts() ) {
+			$query->the_post();
+
+			$seasons[get_the_ID()] = get_the_title();
+		}
+	}
+
+	return $seasons;
+}
+
+/**
+ * Get every season.
+ *
+ * @param  string  $season_id  The season ID
+ * @return array
+ */
+function src_get_races( $season_id ) {
+
+	$query = new WP_Query( array(
+		'post_type'      => 'event',
+		'posts_per_page' => 100,
+		'meta_key'       => 'season',
+		'meta_value'     => $season_id,
+	) );
+
+	$races = array();
+	if ( $query->have_posts() ) {
+		while ( $query->have_posts() ) {
+			$query->the_post();
+
+			$races[get_the_ID()] = get_the_title( get_the_ID() );
+		}
+	}
+
+	return $races;
+}
+
+/**
+ * Get track types.
+ *
+ * @return array
+ */
+function src_get_track_types() {
+	return array(
+		'oval'  => __( 'Oval', 'src' ),
+		'road'  => __( 'Road Course', 'src' ),
+		'roval' => __( 'Roval Layout', 'src' ),
+	);
 }

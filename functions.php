@@ -40,6 +40,7 @@ require( 'inc/class-src-gallery.php' );
 require( 'inc/class-src-cron.php' );
 require( 'inc/class-src-tracks.php' );
 require( 'inc/class-src-seasons.php' );
+require( 'inc/class-src-events.php' );
 
 require( 'inc/functions.php' );
 
@@ -48,3 +49,4 @@ new SRC_Gallery;
 new SRC_Cron();
 new SRC_Tracks();
 new SRC_Seasons();
+new SRC_Events();

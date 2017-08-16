@@ -47,24 +47,38 @@
 
 <?php
 
+$args = array(
+	'post_type'              => 'any',
+	'post_status'            => 'private',
+	'posts_per_page'         => 1,
+	'p'                      => get_option( 'src_featured_page' ),
+	'no_found_rows'          => true,  // useful when pagination is not needed.
+	'update_post_meta_cache' => false, // useful when post meta will not be utilized.
+	'update_post_term_cache' => false, // useful when taxonomy terms will not be utilized.
+	'fields'                 => 'ids',
+) ;
+
 if ( is_single() || is_page() ) {
 
 	$title = get_the_title( get_the_ID() );
 	$content = '';
 	$image_url = get_the_post_thumbnail_url( get_the_ID() );
 
-} else {
+	// If no image URL, then grab the one from the featured image on front page
+	if ( false === $image_url ) {
 
-	$args = array(
-		'post_type'              => 'any',
-		'post_status'            => 'private',
-		'posts_per_page'         => 1,
-		'p'                      => get_option( 'src_featured_page' ),
-		'no_found_rows'          => true,  // useful when pagination is not needed.
-		'update_post_meta_cache' => false, // useful when post meta will not be utilized.
-		'update_post_term_cache' => false, // useful when taxonomy terms will not be utilized.
-		'fields'                 => 'ids',
-	) ;
+		$featured_item = new WP_Query( $args );
+		if ( $featured_item->have_posts() ) {
+			while ( $featured_item->have_posts() ) {
+				$featured_item->the_post();
+
+				$image_url = get_the_post_thumbnail_url();
+			}
+		}
+
+	}
+
+} else {
 
 	$featured_item = new WP_Query( $args );
 	if ( $featured_item->have_posts() ) {
